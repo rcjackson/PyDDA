@@ -7,7 +7,6 @@ Created on Mon Aug  7 09:17:40 2017
 import pyart
 import numpy as np
 import time
-import cartopy.crs as ccrs
 import math
 
 from .. import cost_functions
@@ -15,7 +14,6 @@ from ..cost_functions import J_function, grad_J
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.interpolate import interp1d
 from scipy.signal import savgol_filter
-from matplotlib import pyplot as plt
 from copy import deepcopy
 from .angles import add_azimuth_as_field, add_elevation_as_field
 
@@ -157,8 +155,6 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         A list of Py-ART grids containing the derived wind fields. These fields
         are displayable by the visualization module.
     """
-
-    num_evaluations = 0
 
     # We have to have a prescribed storm motion for vorticity constraint
     if(Ut is None or Vt is None):

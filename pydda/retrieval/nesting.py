@@ -9,6 +9,7 @@ from scipy.interpolate import griddata
 from copy import deepcopy
 from datetime import datetime
 from .wind_retrieve import get_dd_wind_field
+from scipy import sparse
 
 
 # Reduces the resolution of a PyART grid
