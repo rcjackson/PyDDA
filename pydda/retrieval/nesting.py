@@ -128,8 +128,8 @@ def _concatenate_pyart_grids(grid_list, axis=1):
 # 2. Then, we use the reduced resolution retrieval as an input to the
 # high resolution retrieval in each region
 # Finally, we check for continuity at the boundaries
-def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client,
-                             reduction_factor=2, num_splits=2, **kwargs):
+def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client=None,
+                             reduction_factor=2, num_splits=1, **kwargs):
     """
     This function performs a wind retrieval using a nested domain.
     This is useful for grids that are larger than about 500 by 500
@@ -181,11 +181,17 @@ def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client,
     # First, we do retrieval on whole grid with fraction of resolution
     grid_lo_res_list = [_reduce_pyart_grid_res(G, reduction_factor)
                         for G in grid_list]
+    coarse_Co = kwargs.get('Co')*reduction_factor**2
+    coarse_Cm = kwargs.get('Cm')*reduction_factor**2
 
+    new_kwargs = kwargs.copy()
+    new_kwargs['Co'] = coarse_Co
+    new_kwargs['Cm'] = coarse_Cm
     first_pass = get_dd_wind_field(
         grid_lo_res_list, u_init[::, ::reduction_factor, ::reduction_factor],
         v_init[::, ::reduction_factor, ::reduction_factor],
-        w_init[::, ::reduction_factor, ::reduction_factor], **kwargs)
+        w_init[::, ::reduction_factor, ::reduction_factor],
+        **new_kwargs)
 
     # Take the first pass field and regrid to analysis field
     reduced_x = first_pass[0].point_x["data"].flatten()
@@ -265,14 +271,20 @@ def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client,
         gc.collect()
         return new_grids
 
-    futures_array = []
-    for i in range(num_splits):
-        for j in range(num_splits):
-            futures_array.append(client.submit(do_tiny_retrieval, i, j))
+    if client is not None:
+        futures_array = []
+        for i in range(num_splits):
+            for j in range(num_splits):
+                futures_array.append(client.submit(do_tiny_retrieval, i, j))
+        print("Waiting for nested grid to be retrieved...")
+        wait(futures_array)
+        tiny_retrieval2 = client.gather(futures_array)
+    else:
+        tiny_retrieval2 = []
+        for i in range(num_splits):
+            for j in range(num_splits):
+                tiny_retrieval2.append(do_tiny_retrieval(i, j))
 
-    print("Waiting for nested grid to be retrieved...")
-    wait(futures_array)
-    tiny_retrieval2 = client.gather(futures_array)
     tiny_retrieval = []
 
     for i in range(num_splits):
