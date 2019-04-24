@@ -28,7 +28,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                       max_iterations=200, mask_w_outside_opt=True,
                       filter_window=9, filter_order=4, min_bca=30.0,
                       max_bca=150.0, upper_bc=True, model_fields=None,
-                      output_cost_functions=True):
+                      output_cost_functions=True, pgtol=1e-3):
     """
     This function takes in a list of Py-ART Grid objects and derives a
     wind field. Every Py-ART Grid in Grids must have the same grid
@@ -148,6 +148,8 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     output_cost_functions: bool
         Set to True to output the value of each cost function every
         10 iterations.
+    pgtol: float
+        Convergence is reached when the 2-norm of the gradient reaches pgtol.
 
     Returns
     =======
@@ -373,7 +375,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                                                        mod_weights,
                                                        upper_bc,
                                                        False),
-                              maxiter=10, pgtol=1e-3, bounds=bounds,
+                              maxiter=10, pgtol=pgtol, bounds=bounds,
                               fprime=grad_J, disp=0, iprint=-1)
         if(output_cost_functions is True):
             J_function(winds[0], vrs, azs, els, wts, u_back, v_back,
