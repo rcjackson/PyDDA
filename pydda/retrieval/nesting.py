@@ -172,6 +172,7 @@ def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client=None,
        initial retrieval on the entire grid.
     num_splits: int
        The number of splits to make through each axis when doing the nesting.
+       Setting to 1 will do a half V-cycle multigrid retrieval.
 
     **kwargs: dict
         This function will take the same keyword arguments as
@@ -213,96 +214,102 @@ def get_dd_wind_field_nested(grid_list, u_init, v_init, w_init, client=None,
     v_init_new = np.reshape(v_init_new, v_init.shape)
     w_init_new = np.reshape(w_init_new, w_init.shape)
 
-    # Finally, split the analysis into num_splits**2 pieces and save
-    # as temporary files
-    tempfile_name_base = datetime.now().strftime('%y%m%d.%H%M%S')
-    tiny_grids = []
-    k = 0
-    for G in grid_list:
-        cur_list = []
-        split_grids_x = _split_pyart_grid(G, num_splits, axis=2)
-        i = 0
-        for sgrid in split_grids_x:
-            g_list = _split_pyart_grid(sgrid, num_splits)
-            grid_fns = []
-            j = 0
-            for g in g_list:
-                fn = (tempfile_name_base + str(k) + '.' +
-                      str(i) + '.' + str(j) + '.nc')
-                pyart.io.write_grid((tempfile_name_base + str(k) +
-                                     '.' + str(i) + '.' + str(j) + '.nc'), g)
-                j = j + 1
-                grid_fns.append(fn)
-            cur_list.append(grid_fns)
-            i = i + 1
-        del split_grids_x, g_list
+    if num_splits > 1:
+        # Finally, split the analysis into num_splits**2 pieces and save
+        # as temporary files
+        tempfile_name_base = datetime.now().strftime('%y%m%d.%H%M%S')
+        tiny_grids = []
+        k = 0
+        for G in grid_list:
+            cur_list = []
+            split_grids_x = _split_pyart_grid(G, num_splits, axis=2)
+            i = 0
+            for sgrid in split_grids_x:
+                g_list = _split_pyart_grid(sgrid, num_splits)
+                grid_fns = []
+                j = 0
+                for g in g_list:
+                    fn = (tempfile_name_base + str(k) + '.' +
+                          str(i) + '.' + str(j) + '.nc')
+                    pyart.io.write_grid((tempfile_name_base + str(k) +
+                                         '.' + str(i) + '.' + str(j) + '.nc'), g)
+                    j = j + 1
+                    grid_fns.append(fn)
+                cur_list.append(grid_fns)
+                i = i + 1
+            del split_grids_x, g_list
 
-        k = k + 1
-        tiny_grids.append(cur_list)
+            k = k + 1
+            tiny_grids.append(cur_list)
 
-    # Temporarily save the tiny grids and free up memory...we want to
-    # load these when we are running it on the cluster
+        # Temporarily save the tiny grids and free up memory...we want to
+        # load these when we are running it on the cluster
 
-    u_init_split_x = np.array_split(u_init_new, num_splits, axis=2)
-    u_init_split = [np.array_split(ux, num_splits, axis=1)
-                    for ux in u_init_split_x]
-    w_init_split_x = np.array_split(w_init_new, num_splits, axis=2)
-    w_init_split = [np.array_split(wx, num_splits, axis=1)
-                    for wx in w_init_split_x]
-    v_init_split_x = np.array_split(v_init_new, num_splits, axis=2)
-    v_init_split = [np.array_split(vx, num_splits, axis=1)
-                    for vx in v_init_split_x]
+        u_init_split_x = np.array_split(u_init_new, num_splits, axis=2)
+        u_init_split = [np.array_split(ux, num_splits, axis=1)
+                        for ux in u_init_split_x]
+        w_init_split_x = np.array_split(w_init_new, num_splits, axis=2)
+        w_init_split = [np.array_split(wx, num_splits, axis=1)
+                        for wx in w_init_split_x]
+        v_init_split_x = np.array_split(v_init_new, num_splits, axis=2)
+        v_init_split = [np.array_split(vx, num_splits, axis=1)
+                        for vx in v_init_split_x]
 
-    # Clear out unneeded variables (do not need lo-res grids in memory anymore)
-    del u_init_split_x, w_init_split_x, v_init_split_x
-    del first_pass, reduced_x, reduced_y, reduced_z, x, y, z, grid_lo_res_list
-    gc.collect()
-
-    # Serial just for testing, need to use dask in future
-    tiny_retrieval = []
-
-    def do_tiny_retrieval(i, j):
-        tgrids = [pyart.io.read_grid(tiny_grids[k][i][j])
-                  for k in range(len(grid_list))]
-        new_grids = get_dd_wind_field(
-            tgrids, u_init_split[i][j], v_init_split[i][j],
-            w_init_split[i][j], **kwargs)
-        del tgrids
+        # Clear out unneeded variables (do not need lo-res grids in memory anymore)
+        del u_init_split_x, w_init_split_x, v_init_split_x
+        del first_pass, reduced_x, reduced_y, reduced_z, x, y, z, grid_lo_res_list
         gc.collect()
-        return new_grids
 
-    if client is not None:
-        futures_array = []
+        # Serial just for testing, need to use dask in future
+        tiny_retrieval = []
+
+        def do_tiny_retrieval(i, j):
+            tgrids = [pyart.io.read_grid(tiny_grids[k][i][j])
+                      for k in range(len(grid_list))]
+            new_grids = get_dd_wind_field(
+                tgrids, u_init_split[i][j], v_init_split[i][j],
+                w_init_split[i][j], **kwargs)
+            del tgrids
+            gc.collect()
+            return new_grids
+
+        if client is not None:
+            futures_array = []
+            for i in range(num_splits):
+                for j in range(num_splits):
+                    futures_array.append(client.submit(do_tiny_retrieval, i, j))
+            print("Waiting for nested grid to be retrieved...")
+            wait(futures_array)
+            tiny_retrieval2 = client.gather(futures_array)
+        else:
+            tiny_retrieval2 = []
+            for i in range(num_splits):
+                for j in range(num_splits):
+                    tiny_retrieval2.append(do_tiny_retrieval(i, j))
+
+        tiny_retrieval = []
+
         for i in range(num_splits):
-            for j in range(num_splits):
-                futures_array.append(client.submit(do_tiny_retrieval, i, j))
-        print("Waiting for nested grid to be retrieved...")
-        wait(futures_array)
-        tiny_retrieval2 = client.gather(futures_array)
-    else:
-        tiny_retrieval2 = []
-        for i in range(num_splits):
-            for j in range(num_splits):
-                tiny_retrieval2.append(do_tiny_retrieval(i, j))
+            new_grid_list = []
 
-    tiny_retrieval = []
+            for j in range(len(grid_list)):
+                new_grid_list.append(_concatenate_pyart_grids(
+                    [tiny_retrieval2[k+i*num_splits][j]
+                     for k in range(0, num_splits)], axis=1))
+            tiny_retrieval.append(new_grid_list)
 
-    for i in range(num_splits):
         new_grid_list = []
-
-        for j in range(len(grid_list)):
+        for i in range(len(grid_list)):
             new_grid_list.append(_concatenate_pyart_grids(
-                [tiny_retrieval2[k+i*num_splits][j]
-                 for k in range(0, num_splits)], axis=1))
-        tiny_retrieval.append(new_grid_list)
+                [tiny_retrieval[k][i] for k in range(num_splits)], axis=2))
 
-    new_grid_list = []
-    for i in range(len(grid_list)):
-        new_grid_list.append(_concatenate_pyart_grids(
-            [tiny_retrieval[k][i] for k in range(num_splits)], axis=2))
-
-    tempfile_list = glob.glob(tempfile_name_base + "*")
-    for fn in tempfile_list:
-        os.remove(fn)
+        tempfile_list = glob.glob(tempfile_name_base + "*")
+        for fn in tempfile_list:
+            os.remove(fn)
+    else:
+        # No need to split and merge, just retrieve
+        new_grid_list = get_dd_wind_field(
+            grid_list, u_init_new, v_init_new,
+            w_init_new, **kwargs)
 
     return new_grid_list
