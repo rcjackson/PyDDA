@@ -139,7 +139,7 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
             w_model, coeff=Cmod)
     else:
         Jmod = 0
-
+    where_mask = (np.sum(weights, axis=0) + np.sum(model_weights, axis=0)) < 1
     if(print_out is True):
         print(('| Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  ' +
                '| Max w  '))
@@ -149,7 +149,7 @@ def J_function(winds, vrs, azs, els, wts, u_back, v_back, u_model,
                "{:9.4f}".format(Jbackground) + '|' +
                "{:9.4f}".format(Jvorticity) + '|' +
                "{:9.4f}".format(Jmod) + '|' +
-               "{:9.4f}".format(np.abs(winds[2]).max())))
+               "{:9.4f}".format(np.ma.max(np.abs(winds[2][~where_mask])))))
 
     return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod
 

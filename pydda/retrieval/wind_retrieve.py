@@ -158,8 +158,6 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         are displayable by the visualization module.
     """
 
-    num_evaluations = 0
-
     # We have to have a prescribed storm motion for vorticity constraint
     if(Ut is None or Vt is None):
         if(Cv != 0.0):
@@ -224,16 +222,18 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
 
     # Set up wind fields and weights from each radar
     weights = np.zeros(
-        (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+        (len(Grids), u_init.shape[0], u_init.shape[1], u_init.shape[2]),
+        dtype='float32')
 
-    bg_weights = np.zeros(v_init.shape)
+    bg_weights = np.zeros(v_init.shape, dtype='float32')
     if(model_fields is not None):
         mod_weights = np.ones(
             (len(model_fields), u_init.shape[0], u_init.shape[1],
-             u_init.shape[2]))
+             u_init.shape[2]), dtype='float32')
     else:
         mod_weights = np.zeros(
-            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]))
+            (1, u_init.shape[0], u_init.shape[1], u_init.shape[2]),
+            dtype='float32')
 
     if(model_fields is None):
         if(Cmod != 0.0):
@@ -241,18 +241,19 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                  'Cmod must be zero if model fields are not specified!')
 
     bca = np.zeros(
-        (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]))
-    M = np.zeros(len(Grids))
-    sum_Vr = np.zeros(len(Grids))
+        (len(Grids), len(Grids), u_init.shape[1], u_init.shape[2]),
+        dtype='float32')
+    M = np.zeros(len(Grids), dtype='float32')
+    sum_Vr = np.zeros(len(Grids), dtype='float32')
 
     for i in range(len(Grids)):
         wts.append(cost_functions.calculate_fall_speed(Grids[i],
                                                        refl_field=refl_field))
         add_azimuth_as_field(Grids[i], dz_name=refl_field)
         add_elevation_as_field(Grids[i], dz_name=refl_field)
-        vrs.append(Grids[i].fields[vel_name]['data'])
-        azs.append(Grids[i].fields['AZ']['data']*np.pi/180)
-        els.append(Grids[i].fields['EL']['data']*np.pi/180)
+        vrs.append(Grids[i].fields[vel_name]['data'].astype('float32'))
+        azs.append(Grids[i].fields['AZ']['data'].astype('float32')*np.pi/180)
+        els.append(Grids[i].fields['EL']['data'].astype('float32')*np.pi/180)
 
     if(len(Grids) > 1):
         for i in range(len(Grids)):
@@ -339,25 +340,20 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     ndims = len(winds)
 
     print(("Starting solver "))
-    dx = np.diff(Grids[0].x['data'], axis=0)[0]
-    dy = np.diff(Grids[0].y['data'], axis=0)[0]
-    dz = np.diff(Grids[0].z['data'], axis=0)[0]
+    dx = np.diff(Grids[0].x['data'].astype('float32'), axis=0)[0]
+    dy = np.diff(Grids[0].y['data'].astype('float32'), axis=0)[0]
+    dz = np.diff(Grids[0].z['data'].astype('float32'), axis=0)[0]
     print('rmsVR = ' + str(rmsVr))
     print('Total points:' + str(weights.sum()))
-    z = Grids[0].point_z['data']
+    z = Grids[0].point_z['data'].astype('float32')
 
-    the_time = time.time()
     bt = time.time()
 
     # First pass - no filter
-    wcurr = w_init
-    wprev = 100*np.ones(w_init.shape)
     wprevmax = 99
     wcurrmax = w_init.max()
     iterations = 0
-    warnflag = 99999
-    coeff_max = np.max([Co, Cb, Cm, Cx, Cy, Cz, Cb])
-    bounds = [(-x, x) for x in 100*np.ones(winds.shape)]
+    bounds = [(-x, x) for x in 100*np.ones(winds.shape, dtype='float32')]
 
     u_model = []
     v_model = []
@@ -367,10 +363,10 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
             u_field = ("U_" + the_field)
             v_field = ("V_" + the_field)
             w_field = ("W_" + the_field)
-            u_model.append(Grids[0].fields[u_field]["data"])
-            v_model.append(Grids[0].fields[v_field]["data"])
-            w_model.append(Grids[0].fields[w_field]["data"])
-
+            u_model.append(Grids[0].fields[u_field]["data"].astype('float32'))
+            v_model.append(Grids[0].fields[v_field]["data"].astype('float32'))
+            w_model.append(Grids[0].fields[w_field]["data"].astype('float32'))
+    where_mask = np.sum(weights, axis=0) + np.sum(mod_weights, axis=0)
     while(iterations < max_iterations and
           (abs(wprevmax-wcurrmax) > 0.02)):
         wprevmax = wcurrmax
@@ -401,12 +397,11 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
                    grid_shape, dx, dy, dz, z, rmsVr,
                    weights, bg_weights, mod_weights,
                    upper_bc, True)
-        warnflag = winds[2]['warnflag']
         winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
                                       grid_shape[2]))
         iterations = iterations+10
-        print('Iterations before filter: ' + str(iterations))
-        wcurrmax = winds[2].max()
+        print('Iterations: ' + str(iterations))
+        wcurrmax = winds[2][where_mask >= 1].max()
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -414,41 +409,17 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
         print('Applying low pass filter to wind field...')
         winds = np.reshape(winds, (3, grid_shape[0], grid_shape[1],
                                    grid_shape[2]))
-        winds[0] = savgol_filter(winds[0], 9, 3, axis=0)
-        winds[0] = savgol_filter(winds[0], 9, 3, axis=1)
-        winds[0] = savgol_filter(winds[0], 9, 3, axis=2)
-        winds[1] = savgol_filter(winds[1], 9, 3, axis=0)
-        winds[1] = savgol_filter(winds[1], 9, 3, axis=1)
-        winds[1] = savgol_filter(winds[1], 9, 3, axis=2)
-        winds[2] = savgol_filter(winds[2], 9, 3, axis=0)
-        winds[2] = savgol_filter(winds[2], 9, 3, axis=1)
-        winds[2] = savgol_filter(winds[2], 9, 3, axis=2)
+        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
+        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
+        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
+        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
+        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
+        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
+        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
+        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
+        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
         winds = np.stack([winds[0], winds[1], winds[2]])
-        winds = winds.flatten()
-        iterations = 0
-        while(iterations < filt_iterations):
-            winds = fmin_l_bfgs_b(
-                J_function, winds, args=(vrs, azs, els,
-                                         wts, u_back, v_back,
-                                         u_model, v_model, w_model,
-                                         Co, Cm, Cx, Cy, Cz, Cb,
-                                         Cv, Cmod, Ut, Vt,
-                                         grid_shape,
-                                         dx, dy, dz, z, rmsVr,
-                                         weights, bg_weights,
-                                         mod_weights,
-                                         upper_bc,
-                                         False),
-                maxiter=10, pgtol=1e-3, bounds=bounds,
-                fprime=grad_J, disp=0, iprint=-1)
 
-            warnflag = winds[2]['warnflag']
-            winds = np.reshape(winds[0], (3, grid_shape[0], grid_shape[1],
-                                          grid_shape[2]))
-            iterations = iterations+1
-            print('Iterations after filter: ' + str(iterations))
-            winds = np.stack([winds[0], winds[1], winds[2]])
-            winds = winds.flatten()
     print("Done! Time = " + "{:2.1f}".format(time.time() - bt))
 
     # First pass - no filter
@@ -457,7 +428,7 @@ def get_dd_wind_field(Grids, u_init, v_init, w_init, vel_name=None,
     u = the_winds[0]
     v = the_winds[1]
     w = the_winds[2]
-    where_mask = np.sum(weights, axis=0) + np.sum(mod_weights, axis=0)
+
     
     u = np.ma.array(u)
     w = np.ma.array(w)
@@ -540,6 +511,4 @@ def get_bca(rad1_lon, rad1_lat, rad2_lon, rad2_lat, x, y, projparams):
     a = np.sqrt(np.multiply(x, x) + np.multiply(y, y))
     b = np.sqrt(pow(x-rad2[0], 2) + pow(y-rad2[1], 2))
     c = np.sqrt(rad2[0]*rad2[0] + rad2[1]*rad2[1])
-    theta_1 = np.arccos(x/a)
-    theta_2 = np.arccos((x-rad2[1])/b)
     return np.arccos((a*a+b*b-c*c)/(2*a*b))
