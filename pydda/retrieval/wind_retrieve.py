@@ -338,7 +338,7 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                                 bca[i, j] >= math.radians(min_bca),
                                 bca[i, j] <= math.radians(max_bca)))] = 1
                         cur_array[~valid] = 0
-                        parameters.weights[i, k] = cur_array
+                        parameters.weights[i, k] += cur_array
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
 
@@ -368,7 +368,7 @@ def _get_dd_wind_field_scipy(Grids, u_init, v_init, w_init, engine,
                             bca[i, j] < math.radians(min_bca),
                             bca[i, j] > math.radians(max_bca))] = 1
                         cur_array[~valid] = 1
-                        parameters.bg_weights[i] = cur_array
+                        parameters.bg_weights[i] += cur_array
                     else:
                         parameters.bg_weights[i] = weights_bg[i]
 
@@ -764,7 +764,7 @@ def _get_dd_wind_field_tensorflow(Grids, u_init, v_init, w_init, points=None, ve
                                                      bca[i, j] >= math.radians(min_bca),
                                                      bca[i, j] <= math.radians(max_bca)))] = 1
                         cur_array[~valid] = 0
-                        parameters.weights[i, k] = cur_array
+                        parameters.weights[i, k] += cur_array
                     else:
                         parameters.weights[i, k] = weights_obs[i][k, :, :]
 
