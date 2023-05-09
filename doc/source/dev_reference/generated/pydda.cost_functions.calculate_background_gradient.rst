@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_background_gradient
-==================================================
+﻿pydda.cost\_functions.calculate\_background\_gradient
+=====================================================
 
 .. currentmodule:: pydda.cost_functions
 

@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_mass_continuity
-==============================================
+﻿pydda.cost\_functions.calculate\_mass\_continuity
+=================================================
 
 .. currentmodule:: pydda.cost_functions
 

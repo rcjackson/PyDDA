@@ -22,3 +22,5 @@ EXAMPLE_RADAR0 = os.path.join(DATA_PATH, 'example_grid_radar0.nc')
 EXAMPLE_RADAR1 = os.path.join(DATA_PATH, 'example_grid_radar1.nc')
 SOUNDING_PATH = os.path.join(DATA_PATH, 'test_sounding.cdf')
 ERA_PATH = os.path.join(DATA_PATH, 'test_era_interim.nc')
+SGP_SOUNDING = os.path.join(DATA_PATH, 'sgpsondewnpnC1.b1.20120520.053800.cdf')
+

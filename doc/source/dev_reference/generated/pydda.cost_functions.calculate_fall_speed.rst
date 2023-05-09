@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_fall_speed
-=========================================
+﻿pydda.cost\_functions.calculate\_fall\_speed
+============================================
 
 .. currentmodule:: pydda.cost_functions
 

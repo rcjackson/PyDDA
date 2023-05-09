@@ -43,14 +43,18 @@ of interest. In this example, we will elect for a 500 m grid spacing.
 The :code:`grid_limits` is a 3-tuple of 2-tuples specifying the :math:`z`, :math:`y`, and :math:`x`
 limits of the grid in meters. The :code:`grid_shape` specifies the shape of the grid in number of
 points. We then use PyART's `grid_from_radars <https://arm-doe.github.io/pyart/API/generated/pyart.map.grid_from_radars.html>`_
-function to create the grids :code:`grid_sw` and :code:`grid_se`.
+function to create the grids :code:`grid_sw` and :code:`grid_se`. Note that we are fixing the origin
+of the grid to match one of the radar centers. The two grids need to represent the same geographical
+locations for them to be used by PyDDA.
 
 .. code-block:: python 
 
     grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits, 
-                                     grid_shape=grid_shape, gatefilter=gatefilter_sw)
+                                     grid_shape=grid_shape, gatefilter=gatefilter_sw,
+                                     grid_origin=(radar_sw.latitude["data"], radar_sw.longitude["data"]))
     grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits, 
-                                     grid_shape=grid_shape, gatefilter=gatefilter_se)
+                                     grid_shape=grid_shape, gatefilter=gatefilter_se,
+                                     grid_origin=(radar_sw.latitude["data"], radar_sw.longitude["data"]))
 
 Finally, we should visualize the output grids using Py-ART's 
 `GridMapDisplay <https://arm-doe.github.io/pyart/API/generated/pyart.graph.GridMapDisplay.html>`_.
@@ -106,7 +110,7 @@ Finally, we should visualize the output grids using Py-ART's
     gatefilter_se = pyart.filters.GateFilter(radar_se)
     gatefilter_se.exclude_above('velocity_texture', 3)
 
-    # Apply Region Based DeAlising Utiltiy
+    # Apply Region Based DeAlising Utility
     vel_dealias_sw = pyart.correct.dealias_region_based(radar_sw,
                                                         vel_field='mean_doppler_velocity',
                                                         nyquist_vel=19,
@@ -114,7 +118,7 @@ Finally, we should visualize the output grids using Py-ART's
                                                         gatefilter=gatefilter_sw
                                                         )
 
-    # Apply Region Based DeAlising Utiltiy
+    # Apply Region Based DeAlising Utility
     vel_dealias_se = pyart.correct.dealias_region_based(radar_se,
                                                         vel_field='mean_doppler_velocity',
                                                         nyquist_vel=19,
@@ -130,8 +134,12 @@ Finally, we should visualize the output grids using Py-ART's
     grid_shape = (31, 201, 201)
 
     grid_sw = pyart.map.grid_from_radars([radar_sw], grid_limits=grid_limits, 
-                                     grid_shape=grid_shape, gatefilter=gatefilter_sw)
-    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits, 
+                                     fields=["corrected_reflectivity_horizontal", "corrected_velocity"],
+                                     grid_shape=grid_shape, gatefilter=gatefilter_sw,
+                                     grid_origin=(radar_sw.latitude["data"], radar_sw.longitude["data"]))
+    grid_se = pyart.map.grid_from_radars([radar_se], grid_limits=grid_limits,
+                                     fields=["corrected_reflectivity_horizontal", "corrected_velocity"],
+                                     grid_origin=(radar_sw.latitude["data"], radar_sw.longitude["data"]), 
                                      grid_shape=grid_shape, gatefilter=gatefilter_se)
 
     fig = plt.figure(figsize=(8, 12))
@@ -168,8 +176,3 @@ https://doi.org/10.1175/1520-0450(1983)022<1487:AIBOMA>2.0.CO;2.
 Kosiba, K., J. Wurman, Y. Richardson, P. Markowski, P. Robinson, and J. Marquis, 2013: 
 Genesis of the Goshen County, Wyoming, Tornado on 5 June 2009 during VORTEX2. 
 Mon. Wea. Rev., 141, 1157–1181, https://doi.org/10.1175/MWR-D-12-00056.1.
-
-
-
-
-

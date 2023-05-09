@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_vertical_vorticity_gradient
-==========================================================
+﻿pydda.cost\_functions.calculate\_vertical\_vorticity\_gradient
+==============================================================
 
 .. currentmodule:: pydda.cost_functions
 

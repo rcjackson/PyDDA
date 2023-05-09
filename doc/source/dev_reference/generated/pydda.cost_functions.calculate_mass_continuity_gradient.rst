@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_mass_continuity_gradient
-=======================================================
+﻿pydda.cost\_functions.calculate\_mass\_continuity\_gradient
+===========================================================
 
 .. currentmodule:: pydda.cost_functions
 

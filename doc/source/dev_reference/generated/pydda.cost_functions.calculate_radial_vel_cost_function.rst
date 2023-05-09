@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_radial_vel_cost_function
-=======================================================
+﻿pydda.cost\_functions.calculate\_radial\_vel\_cost\_function
+============================================================
 
 .. currentmodule:: pydda.cost_functions
 

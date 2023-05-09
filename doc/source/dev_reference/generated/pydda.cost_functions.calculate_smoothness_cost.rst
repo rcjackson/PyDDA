@@ -1,5 +1,5 @@
-pydda.cost_functions.calculate_smoothness_cost
-==============================================
+﻿pydda.cost\_functions.calculate\_smoothness\_cost
+=================================================
 
 .. currentmodule:: pydda.cost_functions
 

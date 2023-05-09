@@ -1,5 +1,5 @@
-pydda.cost_functions.grad_J
-===========================
+﻿pydda.cost\_functions.grad\_J
+=============================
 
 .. currentmodule:: pydda.cost_functions
 
