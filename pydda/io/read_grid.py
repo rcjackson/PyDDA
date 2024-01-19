@@ -9,7 +9,7 @@ from pyart.core.transforms import cartesian_to_geographic
 from ..retrieval.angles import add_azimuth_as_field, add_elevation_as_field
 
 
-def read_grid(file_name, level_name="parent", **kwargs):
+def read_grid(file_name, **kwargs):
     """
     Opens a Cf-compliant netCDF grid object produced by a utility like
     PyART or RadxGrid. This will add all variables PyDDA needs
@@ -21,8 +21,6 @@ def read_grid(file_name, level_name="parent", **kwargs):
     file_name: str or list
         The name of the file to open. If a list of files is provided, the grids
         are opened as a parent node with all grid datasets concatenated together.
-    level_name: str
-        The name of the nest level to put in the datatree. The specified grids will
 
     Returns
     -------
