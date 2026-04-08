@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Guide and example on how to use nested grids with DataTrees\n\nThis is an example on how to use PyDDA's ability to handle nested\ngrids using xarray DataTrees. In this example, we load radars with\ntwo pre-generated Cf/Radial grid. The fine grids are higher resolution\ngrids that are contained within the coarser grid.\n\nThe DataTree structure that PyDDA follows is:\n\n::\n\n    root\n      |---nest_0/radar_1\n      |---nest_0/radar_2\n      |---nest_0/radar_n\n      |---nest_1/radar_1\n      |---nest_1/radar_2\n      |---nest_1/radar_m\n\nEach member of this tree is a DataTree itself. PyDDA will know if the\nDataTree contains data from a radar when the name of the node begins\nwith **radar_**. The root node of each grid level, in this example,\n**root** and **inner_nest** will contain the keyword arguments that are\ninputs to :code:`pydda.retrieval.get_dd_wind_field` as attributes for the\ntree. PyDDA will use the attributes at each level as the arguments for the\nretrieval, allowing the user to vary the coefficients by grid level.\n\nUsing :code:`pydda.retrieval.get_dd_wind_field_nested` will allow PyDDA\nto perform the retrieval on the 0th grid first. It will then\nperform on the subsequent grid levels, using the previous nest as both the\nhorizontal boundary conditions and initialization for the retrieval in the next\nnest. Finally, PyDDA will update the winds in the first grid by nearest-\nneighbor interpolation of the latter grid into the overlapping portion between\nthe inner and outer grid level.\n\nPyDDA will then return the retrieved wind fields as the \"u\", \"v\", and \"w\"\nDataArrays inside each of the root nodes for each level, in this case\n**root** and **inner_nest**.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "## Do imports\nimport pydda\nimport matplotlib.pyplot as plt\nimport warnings\nfrom xarray import DataTree\n\nwarnings.filterwarnings(\"ignore\")\n\n\"\"\"\nWe will load pregenerated grids for this case.\n\"\"\"\ntest_coarse0 = pydda.io.read_grid(pydda.tests.get_sample_file(\"test_coarse0.nc\"))\ntest_coarse1 = pydda.io.read_grid(pydda.tests.get_sample_file(\"test_coarse1.nc\"))\ntest_fine0 = pydda.io.read_grid(pydda.tests.get_sample_file(\"test_fine0.nc\"))\ntest_fine1 = pydda.io.read_grid(pydda.tests.get_sample_file(\"test_fine1.nc\"))\n\n\"\"\"\nInitalize with a zero wind field. We have HRRR data already generated for this case inside\nthe example data files to provide a model constraint.\n\"\"\"\ntest_coarse0 = pydda.initialization.make_constant_wind_field(\n    test_coarse0, (0.0, 0.0, 0.0)\n)\n\n\"\"\"\nSpecify the retrieval parameters at each level\n\"\"\"\nkwargs_dict = dict(\n    Cm=256.0,\n    Co=1e-2,\n    Cx=50.0,\n    Cy=50.0,\n    Cz=50.0,\n    Cmod=1e-5,\n    model_fields=[\"hrrr\"],\n    refl_field=\"DBZ\",\n    wind_tol=0.5,\n    max_iterations=150,\n    engine=\"scipy\",\n)\n\n\"\"\"\nEnforce equal times for each grid. This is required for the DataTree structure since time is an\ninherited dimension.\n\"\"\"\ntest_coarse1[\"time\"] = test_coarse0[\"time\"]\ntest_fine0[\"time\"] = test_coarse0[\"time\"]\ntest_fine1[\"time\"] = test_coarse1[\"time\"]\n\"\"\"\n\nProvide the overlying grid structure as specified above.\n\"\"\"\ntree_dict = {\n    \"/nest_0/radar_ktlx\": test_coarse0,\n    \"/nest_0/radar_kict\": test_coarse1,\n    \"/nest_1/radar_ktlx\": test_fine0,\n    \"/nest_1/radar_kict\": test_fine1,\n}\n\ntree = DataTree.from_dict(tree_dict)\ntree[\"/nest_0/\"].attrs = kwargs_dict\ntree[\"/nest_1/\"].attrs = kwargs_dict\n\n\"\"\"\nPerform the retrieval\n\"\"\"\n\ngrid_tree = pydda.retrieval.get_dd_wind_field_nested(tree)\n\n\"\"\"\nPlot the coarse grid output and finer grid output\n\"\"\"\n\nfig, ax = plt.subplots(1, 2, figsize=(10, 5))\npydda.vis.plot_horiz_xsection_quiver(\n    grid_tree[\"nest_0\"],\n    ax=ax[0],\n    level=5,\n    cmap=\"ChaseSpectral\",\n    vmin=-10,\n    vmax=80,\n    quiverkey_len=10.0,\n    background_field=\"DBZ\",\n    bg_grid_no=1,\n    w_vel_contours=[1, 2, 5, 10],\n    quiver_spacing_x_km=50.0,\n    quiver_spacing_y_km=50.0,\n    quiverkey_loc=\"bottom_right\",\n)\npydda.vis.plot_horiz_xsection_quiver(\n    grid_tree[\"nest_1\"],\n    ax=ax[1],\n    level=5,\n    cmap=\"ChaseSpectral\",\n    vmin=-10,\n    vmax=80,\n    quiverkey_len=10.0,\n    background_field=\"DBZ\",\n    bg_grid_no=1,\n    w_vel_contours=[1, 2, 5, 10],\n    quiver_spacing_x_km=50.0,\n    quiver_spacing_y_km=50.0,\n    quiverkey_loc=\"bottom_right\",\n)\n\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.14.4"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

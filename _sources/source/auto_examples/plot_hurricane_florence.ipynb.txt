@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Example on integrating radar and HRRR data\n\nThis is an example of how to retrieve winds in Hurricane Florence.\nIn this example, we use data from 2 NEXRAD radars as well as from\nthe HRRR to retrieve the winds\n\nThis example has been updated to use _Herbie to retrieve the HRRR data.\nIn addition, _pooch is used to retrieve the gridded data for the example.\nHerbie is not required to run PyDDA, but must be installed to run this example.\n\n\nAuthor: Robert C. Jackson\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "import pydda\nimport matplotlib.pyplot as plt\nimport cartopy.crs as ccrs\nimport numpy as np\n\nfrom herbie import Herbie\n\nH = Herbie(\"2018-09-14 06:00\", model=\"hrrr\", product=\"prs\", fxx=0)\nH.download()\n\ngrid_mhx_path = pydda.tests.get_sample_file(\"grid_mhx.nc\")\ngrid_ltx_path = pydda.tests.get_sample_file(\"grid_ltx.nc\")\n\ngrid_mhx = pydda.io.read_grid(grid_mhx_path)\ngrid_ltx = pydda.io.read_grid(grid_ltx_path)\n\ngrid_mhx = pydda.constraints.add_hrrr_constraint_to_grid(grid_mhx, H.grib)\ngrid_mhx = pydda.initialization.make_constant_wind_field(grid_mhx, (0.0, 0.0, 0.0))\nout_grids, _ = pydda.retrieval.get_dd_wind_field(\n    [grid_mhx, grid_ltx],\n    Co=1e-2,\n    Cm=128.0,\n    Cmod=1e-4,\n    Cx=1e-4,\n    Cy=1e-4,\n    Cz=1e-4,\n    max_iterations=100,\n    mask_outside_opt=True,\n    vel_name=\"corrected_velocity\",\n    engine=\"scipy\",\n    model_fields=[\"hrrr\"],\n)\n\nfig = plt.figure(figsize=(25, 15))\nax = plt.axes(projection=ccrs.PlateCarree())\nax = pydda.vis.plot_horiz_xsection_barbs_map(\n    out_grids,\n    ax=ax,\n    bg_grid_no=-1,\n    level=3,\n    barb_spacing_x_km=20.0,\n    barb_spacing_y_km=20.0,\n    cmap=\"ChaseSpectral\",\n)\nax.set_xticks(np.arange(-80, -75, 0.5))\nax.set_yticks(np.arange(33.0, 35.5, 0.5))\nplt.title(out_grids[0].time.attrs[\"units\"][13:] + \" winds at 0.5 km\")\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.14.4"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

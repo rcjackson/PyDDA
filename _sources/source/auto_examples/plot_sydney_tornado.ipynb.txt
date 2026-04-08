@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Example of a wind retrieval in a tornado over Sydney\n\nThis shows an example of how to retrieve winds from 4 radars over Sydney.\n\nWe use smoothing to decrease the magnitude of the updraft in the region of\nthe mesocyclone. The reduction of noise also helps the solution converge\nmuch faster since the cost function is smoother and therefore less susecptible\nto find a local minimum that is in noise.\n\nThe observational constraint is reduced to 0.01 from the usual 1 because we are factoring in\nmany more data points as we are using 4 radars instead of the two in the Darwin example.\n\nThis example uses pooch to download the data files.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "import pydda\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n\ngrid1_path = pydda.tests.get_sample_file(\"grid1_sydney.nc\")\ngrid2_path = pydda.tests.get_sample_file(\"grid2_sydney.nc\")\ngrid3_path = pydda.tests.get_sample_file(\"grid3_sydney.nc\")\ngrid4_path = pydda.tests.get_sample_file(\"grid4_sydney.nc\")\ngrid1 = pydda.io.read_grid(grid1_path)\ngrid2 = pydda.io.read_grid(grid2_path)\ngrid3 = pydda.io.read_grid(grid3_path)\ngrid4 = pydda.io.read_grid(grid4_path)\n\n# Set initialization and do retrieval\ngrid1 = pydda.initialization.make_constant_wind_field(grid1, vel_field=\"VRADH_corr\")\nnew_grids, _ = pydda.retrieval.get_dd_wind_field(\n    [grid1, grid2, grid3, grid4],\n    Co=1e-2,\n    Cm=256.0,\n    Cx=10,\n    Cy=10,\n    Cz=10,\n    vel_name=\"VRADH_corr\",\n    refl_field=\"DBZH\",\n    mask_outside_opt=True,\n    wind_tol=0.5,\n    max_iterations=200,\n    engine=\"scipy\",\n)\n# Make a neat plot\nfig = plt.figure(figsize=(10, 7))\nax = pydda.vis.plot_horiz_xsection_quiver_map(\n    new_grids,\n    background_field=\"DBZH\",\n    level=3,\n    show_lobes=False,\n    bg_grid_no=3,\n    vmin=0,\n    vmax=60,\n    quiverkey_len=20.0,\n    w_vel_contours=[1.0, 3.0, 5.0, 10.0, 20.0],\n    quiver_spacing_x_km=2.0,\n    quiver_spacing_y_km=2.0,\n    quiverkey_loc=\"top\",\n    colorbar_contour_flag=True,\n    cmap=\"ChaseSpectral\",\n)\nax.set_xticks(np.arange(150.5, 153, 0.1))\nax.set_yticks(np.arange(-36, -32.0, 0.1))\nax.set_xlim([151.0, 151.35])\nax.set_ylim([-34.15, -33.9])\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.14.4"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

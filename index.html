@@ -1,167 +1,662 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" data-content_root="./" >
+
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 0.1.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="PyDDA 0.1.0 documentation" href="#" />
-    <link rel="next" title="PyDDA Example Gallery" href="source/auto_examples/index.html" /> 
-  </head>
-  <body role="document">
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="source/auto_examples/index.html" title="PyDDA Example Gallery"
-             accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.1.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body" role="main">
-            
-  <div class="section" id="welcome-to-the-pydda-documentation">
-<h1>Welcome to the PyDDA documentation!<a class="headerlink" href="#welcome-to-the-pydda-documentation" title="Permalink to this headline">¶</a></h1>
+    <title>Welcome to the PyDDA documentation! &#8212; PyDDA 2.3.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+
+    <script src="_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="User Guide" href="user_guide/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.3.0" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="contributors_guide/index.html">
+    Contributor’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="source/auto_examples/index.html">
+    PyDDA Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="dev_reference/index.html">
+    Developer Reference Manual
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="user_guide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="contributors_guide/index.html">
+    Contributor’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="source/auto_examples/index.html">
+    PyDDA Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="dev_reference/index.html">
+    Developer Reference Manual
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="welcome-to-the-pydda-documentation">
+<h1>Welcome to the PyDDA documentation!<a class="headerlink" href="#welcome-to-the-pydda-documentation" title="Link to this heading">#</a></h1>
+<a class="reference internal image-reference" href="_images/logo.png"><img alt="alternate text" class="align-center" src="_images/logo.png" style="width: 200px; height: 100px;" />
+</a>
+<a class="reference external image-reference" href="https://doi.org/10.5281/zenodo.3942686"><img alt="https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg" src="https://zenodo.org/badge/DOI/10.5281/zenodo.3942686.svg" />
+</a>
 <p>This is the main page for the documentation of PyDDA. Below are links that
 provide documentation on the installation and use of PyDDA as well as
-description of each of PyDDA&#8217;s subroutines.</p>
-<div class="section" id="installation-instructions">
-<h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h2>
-<p>Before you install PyDDA, ensure that the following dependencies are installed:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Python</span> <span class="mf">3.5</span><span class="o">+</span>
-<span class="n">Py</span><span class="o">-</span><span class="n">ART</span> <span class="mf">1.9</span><span class="o">.</span><span class="mi">0</span><span class="o">+</span>
-<span class="n">scipy</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span><span class="o">+</span>
-<span class="n">numpy</span> <span class="mf">1.13</span><span class="o">.</span><span class="mi">1</span><span class="o">+</span>
-<span class="n">matplotlib</span> <span class="mf">1.5</span><span class="o">.</span><span class="mi">3</span><span class="o">+</span>
+description of each of PyDDA’s subroutines.</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<svg version="1.1" width="10.0em" height="10.0em" class="sd-octicon sd-octicon-book" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 3.75A.75.75 0 0 1 .75 3h7.497c1.566 0 2.945.8 3.751 2.014A4.495 4.495 0 0 1 15.75 3h7.5a.75.75 0 0 1 .75.75v15.063a.752.752 0 0 1-.755.75l-7.682-.052a3 3 0 0 0-2.142.878l-.89.891a.75.75 0 0 1-1.061 0l-.902-.901a2.996 2.996 0 0 0-2.121-.879H.75a.75.75 0 0 1-.75-.75Zm12.75 15.232a4.503 4.503 0 0 1 2.823-.971l6.927.047V4.5h-6.75a3 3 0 0 0-3 3ZM11.247 7.497a3 3 0 0 0-3-2.997H1.5V18h6.947c1.018 0 2.006.346 2.803.98Z"></path></svg></div>
+<p class="sd-card-text"><strong>User Guide</strong></p>
+<p class="sd-card-text">The user guide provides in-depth information on how
+to use PyDDA, including how to get started.
+This is where to look for general conceptual descriptions on how
+to use parts of PyDDA, including how to make your first wind retrieval and
+the required data preprocessing to do so.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="user_guide/index.html"><span class="doc">User Guide</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<svg version="1.1" width="10.0em" height="10.0em" class="sd-octicon sd-octicon-list-unordered" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.75 5.5h11.5a.75.75 0 0 1 0 1.5H8.75a.75.75 0 0 1 0-1.5Zm0 6h11.5a.75.75 0 0 1 0 1.5H8.75a.75.75 0 0 1 0-1.5Zm0 6h11.5a.75.75 0 0 1 0 1.5H8.75a.75.75 0 0 1 0-1.5ZM5 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM4 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm0 12a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg></div>
+<p class="sd-card-text"><strong>Reference Guide</strong></p>
+<p class="sd-card-text">The reference guide contains detailed descriptions on
+every function and class within PyDDA. This is where to turn to understand
+how to use a particular feature or where to search for a specific tool</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="dev_reference/index.html"><span class="doc">Developer Reference Manual</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<svg version="1.1" width="10.0em" height="10.0em" class="sd-octicon sd-octicon-terminal" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.25 12a.75.75 0 0 1-.22.53l-2.75 2.75a.75.75 0 0 1-1.06-1.06L7.44 12 5.22 9.78a.75.75 0 1 1 1.06-1.06l2.75 2.75c.141.14.22.331.22.53Zm2 2a.75.75 0 0 0 0 1.5h5a.75.75 0 0 0 0-1.5h-5Z"></path><path d="M0 4.75C0 3.784.784 3 1.75 3h20.5c.966 0 1.75.784 1.75 1.75v14.5A1.75 1.75 0 0 1 22.25 21H1.75A1.75 1.75 0 0 1 0 19.25Zm1.75-.25a.25.25 0 0 0-.25.25v14.5c0 .138.112.25.25.25h20.5a.25.25 0 0 0 .25-.25V4.75a.25.25 0 0 0-.25-.25Z"></path></svg></div>
+<p class="sd-card-text"><strong>Developer Guide</strong></p>
+<p class="sd-card-text">Want to help make PyDDA better? Found something
+that’s not working quite right? You can find instructions on how to
+contribute to PyDDA here. You can also find detailed descriptions on
+tools useful for developing PyDDA.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="contributors_guide/index.html"><span class="doc">Contributor’s Guide</span></a></div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm sd-card-hover sd-text-center docutils">
+<div class="sd-card-body docutils">
+<div class="sd-card-title sd-font-weight-bold docutils">
+<svg version="1.1" width="10.0em" height="10.0em" class="sd-octicon sd-octicon-graph" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 2.75a.75.75 0 0 0-1.5 0v18.5c0 .414.336.75.75.75H20a.75.75 0 0 0 0-1.5H2.5V2.75Z"></path><path d="M22.28 7.78a.75.75 0 0 0-1.06-1.06l-5.72 5.72-3.72-3.72a.75.75 0 0 0-1.06 0l-6 6a.75.75 0 1 0 1.06 1.06l5.47-5.47 3.72 3.72a.75.75 0 0 0 1.06 0l6.25-6.25Z"></path></svg></div>
+<p class="sd-card-text"><strong>Example Gallery</strong></p>
+<p class="sd-card-text">Check out PyDDA’s gallery of examples which contains
+sample code demonstrating various parts of PyDDA’s functionality.</p>
+</div>
+<a class="sd-stretched-link sd-hide-link-text reference internal" href="source/auto_examples/index.html"><span class="doc">PyDDA Example Gallery</span></a></div>
+</div>
+</div>
+</div>
+<section id="system-requirements">
+<h2>System Requirements<a class="headerlink" href="#system-requirements" title="Link to this heading">#</a></h2>
+<p>This works on any modern version of Linux, Mac OS X, and Windows. For Windows,
+HRRR data integration is not supported. In addition, since PyDDA takes advantage
+of parallelism we recommend:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">An</span> <span class="n">Intel</span> <span class="n">machine</span> <span class="k">with</span> <span class="n">at</span> <span class="n">least</span> <span class="mi">4</span> <span class="n">cores</span>
+<span class="mi">8</span> <span class="n">GB</span> <span class="n">RAM</span>
+<span class="mi">1</span> <span class="n">GB</span> <span class="n">hard</span> <span class="n">drive</span> <span class="n">space</span>
 </pre></div>
 </div>
-<p>Right now there is only one method to install PyDDA, which is from source. To
-do this, just type in the following commands assuming you have the above
-dependencies installed.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">rcjackson</span><span class="o">/</span><span class="n">PyDDA</span>
+<p>While PyDDA will work on less than this, you may run into performance issues.
+In addition, we do not support Python versions less than 3.9.
+If you have an older version installed, PyDDA may work just fine but we will
+not provide support for any issues unless you are using at least Python 3.9.</p>
+</section>
+<section id="installation-instructions">
+<h2>Installation instructions<a class="headerlink" href="#installation-instructions" title="Link to this heading">#</a></h2>
+<p>The GitHub repository for PyDDA is available at:</p>
+<p><a class="reference external" href="https://github.com/openradar/PyDDA">https://github.com/openradar/PyDDA</a></p>
+<p>We do not support Python versions less than 3.9. If you use earlier Python versions,
+be aware, there is no testing done for these versions so problems may arise!</p>
+<p>In order to use the HRRR data constraint, cfgrib needs to be installed. <a class="reference external" href="http://github.com/ecmwf/cfgrib">cfgrib</a> currently only works on Mac OS and Linux, so
+this is an optional dependency of PyDDA so that Windows users can still use PyDDA.
+In order to install cfgrib, simply do:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">cfgrib</span>
+</pre></div>
+</div>
+<p>There are multiple ways to install PyDDA. The recommended way to install PyDDA is
+through the use of the <a class="reference external" href="http://anaconda.org">Anaconda</a> package manager. If you
+have anaconda installed simply type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">pydda</span>
+</pre></div>
+</div>
+<p>This will install PyDDA and all of the required dependencies. You still need to
+install <a class="reference external" href="http://github.com/ecmwf/cfgrib">cfgrib</a> if you wish to read HRRR data.
+If you do not have anaconda, you can still install PyDDA using pip. Running this command
+will install PyDDA and the required dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pydda</span>
+</pre></div>
+</div>
+<p>If you wish to contribute to PyDDA, you should install PyDDA from source. To do this,
+just type in the following commands assuming you have the above dependencies installed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">openradar</span><span class="o">/</span><span class="n">PyDDA</span>
 <span class="n">cd</span> <span class="n">PyDDA</span>
-<span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
+<p>Finally, PyDDA now supports using <a class="reference external" href="https://jax.readthedocs.io">Jax</a> and <a class="reference external" href="https://tensorflow.org">TensorFlow</a>
+for solving the three dimensional wind field. PyDDA requires TensorFlow 2.x and the
+tensorflow-probability package for TensorFlow to be enabled.
+In addition, both of these packages can utilize CUDA-enabled GPUs for much faster processing. These two
+dependencies are optional as the user can still use PyDDA with the SciPy ecosystem.
+The Jax optimizer uses the same optimizer as SciPy’s (<a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin_l_bfgs_b.html">L-BFGS-B</a>).</p>
+</section>
+</section>
+<section id="known-issues">
+<h1>Known issues<a class="headerlink" href="#known-issues" title="Link to this heading">#</a></h1>
+<p>The TensorFlow engine uses the unbounded version of this optimizer which removes the constraint that
+wind magnitudes must be less than 100 m/s. The removal of this constraint can sometimes
+result in numerical instability, so it is recommended that the user test out both Jax and TensorFlow
+if they desire GPU-accelerated retrievals.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="source/auto_examples/index.html">PyDDA Example Gallery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_reference/index.html">Developer Reference Manual</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#cost-functions-module"><code class="docutils literal"><span class="pre">cost_functions</span></code> Module</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-cost-functions-pydda-vis">pydda.cost_functions (pydda.vis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/overview.html">Overview</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/overview.html#why-multi-doppler-retrieval">Why multi-Doppler retrieval?</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/overview.html#how-pydda-works">How PyDDA works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/overview.html#workflow-overview">Workflow overview</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#retrieval-module"><code class="docutils literal"><span class="pre">retrieval</span></code> Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/read_radar_data.html">Reading in Radar Data in Native Radial Coordinates</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/read_radar_data.html#read-in-the-data">Read in the Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/read_radar_data.html#plot-the-data">Plot the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/read_radar_data.html#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/dealiasing_velocities.html">Radar Data Quality Control - Dealiasing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/dealiasing_velocities.html#read-the-data">Read the Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/dealiasing_velocities.html#determining-artifacts-within-doppler-velocities">Determining Artifacts within Doppler Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/dealiasing_velocities.html#apply-dealiasing">Apply Dealiasing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/dealiasing_velocities.html#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/gridding.html">Converting the radar data to Cartesian coordinates with Py-ART</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/gridding.html#gridding-the-data">Gridding the data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/gridding.html#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/retrieving_winds.html">Retrieving your first wind field</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#d-variational-technique">3D variational technique</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#doing-your-first-wind-retrieval">Doing your first wind retrieval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#using-pydda-s-data-model">Using PyDDA’s data model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#using-models-for-constraints">Using models for constraints</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#set-up-your-initialization">Set up your initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#id1">Retrieving your first wind field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/retrieving_winds.html#plotting-the-output-winds">Plotting the output winds</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/optimizing_wind_retrieval.html">Optimizing your wind retrieval</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/visualizing_winds.html">Visualizing the wind retrieval</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/visualizing_winds.html#horizontal-cross-section-quiver">Horizontal cross-section (quiver)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/nesting_wind_retrieval.html">Nested wind retrievals</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="user_guide/nesting_wind_retrieval.html#building-the-nested-grid-tree">Building the nested grid tree</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributors_guide/index.html">Contributor’s Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributors_guide/index.html#contributor-covenant-code-of-conduct">Contributor Covenant Code of Conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributors_guide/index.html#code-style">Code Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributors_guide/index.html#python-file-setup">Python File Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributors_guide/index.html#testing">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributors_guide/index.html#github">GitHub</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="source/auto_examples/index.html">PyDDA Example Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_reference/index.html">Developer Reference Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#cost-functions-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">cost_functions</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-cost-functions-pydda-cost-functions">pydda.cost_functions (pydda.cost_functions)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#retrieval-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">retrieval</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-retrieval-pydda-retrieval">pydda.retrieval (pydda.retrieval)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#vis-module"><code class="docutils literal"><span class="pre">vis</span></code> Module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#vis-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vis</span></code> Module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-vis-pydda-vis">pydda.vis (pydda.vis)</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#initialization-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">initialization</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-initialization-pydda-initialization">pydda.initialization (pydda.initialization)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#constraints-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">constraints</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-constraints-pydda-constraints">pydda.constraints (pydda.constraints)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="dev_reference/index.html#io-module"><code class="xref py py-mod docutils literal notranslate"><span class="pre">io</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dev_reference/index.html#pydda-io-pydda-io">pydda.io (pydda.io)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-</div>
-<div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+</section>
+<section id="further-support">
+<h1>Further support<a class="headerlink" href="#further-support" title="Link to this heading">#</a></h1>
+<p>We are now requesting that all questions related to PyDDA that are not potential software issues to be
+relegated to the <a class="reference external" href="https://openradar.discourse.group">openradar Discourse group</a> with a ‘pydda’ tag on it. This
+enables the entire open radar science community to answer questions related to PyDDA so that both the maintainer
+and users can answer questions people may have.</p>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading">#</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
-</div>
+</section>
 
 
-          </div>
-        </div>
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="user_guide/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">User Guide</p>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Welcome to the PyDDA documentation!</a><ul>
-<li><a class="reference internal" href="#installation-instructions">Installation instructions</a></li>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Welcome to the PyDDA documentation!</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-requirements">System Requirements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-instructions">Installation instructions</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#known-issues">Known issues</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#further-support">Further support</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="source/auto_examples/index.html"
-                        title="next chapter">PyDDA Example Gallery</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/PyDDA-doc.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/index.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-      <div class="clearer"></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="source/auto_examples/index.html" title="PyDDA Example Gallery"
-             >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">PyDDA 0.1.0 documentation</a> &#187;</li> 
-      </ul>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023, PyDDA Developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018, PyDDA Developers.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.6.
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+</p></div>
+      
     </div>
+  
+</div>
+
+  </footer>
   </body>
 </html>

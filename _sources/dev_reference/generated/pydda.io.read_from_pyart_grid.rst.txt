@@ -1,0 +1,6 @@
+﻿pydda.io.read\_from\_pyart\_grid
+================================
+
+.. currentmodule:: pydda.io
+
+.. autofunction:: read_from_pyart_grid

@@ -1,0 +1,6 @@
+﻿pydda.retrieval.make\_initialization\_from\_other\_grid
+=======================================================
+
+.. currentmodule:: pydda.retrieval
+
+.. autofunction:: make_initialization_from_other_grid
