@@ -504,6 +504,163 @@ def make_background_from_wrf(Grid, file_path, wrf_time, radar_loc, vel_field=Non
     return Grid
 
 
+def make_initialization_from_iem_obs(
+    Grid, station_obs, profile=None, power=2, vel_field=None
+):
+    """
+    Create an initial 3D wind field by inverse distance weighting (IDW)
+    interpolation of Iowa Environmental Mesonet surface observations.
+
+    Surface station winds are used to compute horizontal anomalies relative to
+    an optional sounding background.  The anomalies are spread horizontally via
+    IDW and added uniformly at every vertical level.  When no sounding is
+    supplied the background is zero (i.e. the IDW result stands alone).
+
+    Parameters
+    ----------
+    Grid : xarray.Dataset
+        The PyDDA analysis grid.  Must contain ``x``, ``y``, ``z``,
+        ``point_x``, ``point_y``, and ``point_z`` coordinate variables.
+    station_obs : list of dict
+        Surface observations, typically the output of
+        :func:`pydda.constraints.get_iem_obs`.  Each dict must contain the
+        keys ``x``, ``y``, ``z``, ``u``, and ``v`` in the Grid's Cartesian
+        coordinate system (metres).
+    profile : pyart.core.HorizontalWindProfile or None
+        Optional vertical sounding profile used as the background wind field.
+        When provided the IDW step corrects only the horizontal anomalies
+        (departure from the sounding) and the sounding provides the vertical
+        structure.  When ``None`` the background is zero and the surface IDW
+        values are copied unchanged to every model level.
+    power : float
+        IDW distance-weighting exponent.  Higher values give more weight to
+        the nearest station.  Typical values are 1 or 2 (default ``2``).
+    vel_field : str or None
+        Name of the radar velocity field in *Grid* used to determine the
+        output grid shape.  ``None`` will auto-detect via
+        ``Grid.attrs["first_grid_name"]``.
+
+    Returns
+    -------
+    Grid : xarray.Dataset
+        The input Grid with ``u``, ``v``, and ``w`` fields added or replaced.
+        ``w`` is set to zero everywhere because surface stations do not
+        observe vertical motion.
+
+    Notes
+    -----
+    The horizontal IDW anomaly is applied identically at every height level.
+    This is equivalent to assuming that horizontal wind anomalies measured at
+    the surface are representative of the full column (a reasonable first
+    guess for a well-mixed boundary layer).  If a sounding *profile* is
+    given, that profile provides the height-varying mean, while the stations
+    supply the mesoscale horizontal structure.
+
+    The function raises ``ValueError`` if both *station_obs* is empty and
+    *profile* is ``None``, since there is no information to build a field.
+
+    Examples
+    --------
+    >>> import pydda
+    >>> Grid = pydda.io.read_grid(grid_file)
+    >>> stn_obs = pydda.constraints.get_iem_obs(Grid)
+    >>> Grid = pydda.initialization.make_initialization_from_iem_obs(
+    ...     Grid, stn_obs, profile=my_sounding
+    ... )
+    """
+    if len(station_obs) == 0 and profile is None:
+        raise ValueError(
+            "station_obs is empty and no sounding profile was provided. "
+            "At least one source of wind information is required."
+        )
+
+    if vel_field is None:
+        vel_field = Grid.attrs["first_grid_name"]
+
+    grid_x = Grid["x"].values  # (nx,)
+    grid_y = Grid["y"].values  # (ny,)
+    grid_z = Grid["z"].values  # (nz,)
+    nz, ny, nx = len(grid_z), len(grid_y), len(grid_x)
+
+    # --- vertical background from sounding or zeros ---
+    if profile is not None:
+        u_interp_snd = interp1d(
+            profile.height, profile.u_wind, bounds_error=False, fill_value="extrapolate"
+        )
+        v_interp_snd = interp1d(
+            profile.height, profile.v_wind, bounds_error=False, fill_value="extrapolate"
+        )
+        u_back = u_interp_snd(grid_z)  # (nz,)
+        v_back = v_interp_snd(grid_z)  # (nz,)
+    else:
+        u_back = np.zeros(nz)
+        v_back = np.zeros(nz)
+
+    # Broadcast background to full 3D shape
+    u_3d = np.broadcast_to(u_back[:, np.newaxis, np.newaxis], (nz, ny, nx)).copy()
+    v_3d = np.broadcast_to(v_back[:, np.newaxis, np.newaxis], (nz, ny, nx)).copy()
+    w_3d = np.zeros((nz, ny, nx))
+
+    if len(station_obs) == 0:
+        # Background only; w stays zero
+        pass
+    else:
+        station_x = np.array([s["x"] for s in station_obs], dtype=float)
+        station_y = np.array([s["y"] for s in station_obs], dtype=float)
+        station_z = np.array([s["z"] for s in station_obs], dtype=float)
+        station_u = np.array([s["u"] for s in station_obs], dtype=float)
+        station_v = np.array([s["v"] for s in station_obs], dtype=float)
+
+        # Anomaly of each station relative to sounding background at its height
+        u_back_stn = np.interp(station_z, grid_z, u_back)  # (N,)
+        v_back_stn = np.interp(station_z, grid_z, v_back)  # (N,)
+        u_anom = station_u - u_back_stn  # (N,)
+        v_anom = station_v - v_back_stn  # (N,)
+
+        # Horizontal distances: (N, ny, nx)
+        grid_xx, grid_yy = np.meshgrid(grid_x, grid_y)  # (ny, nx) each
+        dx = grid_xx[np.newaxis, :, :] - station_x[:, np.newaxis, np.newaxis]
+        dy = grid_yy[np.newaxis, :, :] - station_y[:, np.newaxis, np.newaxis]
+        d_h = np.sqrt(dx**2 + dy**2)
+
+        # Avoid division by zero when a grid point coincides with a station
+        d_h = np.maximum(d_h, 1.0)
+
+        weights = 1.0 / d_h**power  # (N, ny, nx)
+        weights_norm = weights / weights.sum(axis=0, keepdims=True)
+
+        # IDW-interpolated anomaly on the 2-D horizontal plane
+        u_anom_2d = (weights_norm * u_anom[:, np.newaxis, np.newaxis]).sum(axis=0)
+        v_anom_2d = (weights_norm * v_anom[:, np.newaxis, np.newaxis]).sum(axis=0)
+
+        # Add horizontal anomaly uniformly to every vertical level
+        u_3d += u_anom_2d[np.newaxis, :, :]
+        v_3d += v_anom_2d[np.newaxis, :, :]
+
+    u_attrs = {
+        "standard_name": "u_wind",
+        "long_name": "meridional component of wind velocity",
+    }
+    v_attrs = {
+        "standard_name": "v_wind",
+        "long_name": "zonal component of wind velocity",
+    }
+    w_attrs = {
+        "standard_name": "w_wind",
+        "long_name": "vertical component of wind velocity",
+    }
+    Grid["u"] = xr.DataArray(
+        np.expand_dims(u_3d, 0), dims=("time", "z", "y", "x"), attrs=u_attrs
+    )
+    Grid["v"] = xr.DataArray(
+        np.expand_dims(v_3d, 0), dims=("time", "z", "y", "x"), attrs=v_attrs
+    )
+    Grid["w"] = xr.DataArray(
+        np.expand_dims(w_3d, 0), dims=("time", "z", "y", "x"), attrs=w_attrs
+    )
+    return Grid
+
+
 def make_intialization_from_hrrr(Grid, file_path, method="linear"):
     """
     This function will read an HRRR GRIB2 file and return initial guess

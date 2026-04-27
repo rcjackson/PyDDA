@@ -22,6 +22,7 @@ of numpy arrays with the same shape as the fields in Grid.
     make_wind_field_from_profile
     make_background_from_wrf
     make_initialization_from_era5
+    make_initialization_from_iem_obs
 
 """
 
@@ -29,3 +30,4 @@ from .wind_fields import make_constant_wind_field
 from .wind_fields import make_wind_field_from_profile
 from .wind_fields import make_background_from_wrf
 from .wind_fields import make_initialization_from_era5
+from .wind_fields import make_initialization_from_iem_obs
