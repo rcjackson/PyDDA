@@ -267,7 +267,7 @@ def calculate_smoothness_gradient(
     return y.flatten()
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -305,14 +305,15 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     """
     J = 0.0
     for the_point in point_list:
-        the_box = jnp.logical_and(
-            jnp.logical_and(
-                jnp.abs(x - the_point["x"]) < roi, jnp.abs(y - the_point["y"]) < roi
-            ),
-            jnp.abs(z - the_point["z"]) < roi,
+        dist = jnp.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        the_box = jnp.where(the_box, 1.0, 0.0)
-        J += jnp.sum(((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2) * the_box)
+        dist = jnp.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / jnp.sum(weight)
+        J += jnp.sum(weight * ((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2))
 
     return J * Cp
 
@@ -358,18 +359,16 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_w = jnp.zeros_like(u)
 
     for the_point in point_list:
-        the_box = jnp.where(
-            jnp.logical_and(
-                jnp.logical_and(
-                    np.abs(x - the_point["x"]) < roi, np.abs(y - the_point["y"]) < roi
-                ),
-                np.abs(z - the_point["z"]) < roi,
-            ),
-            1.0,
-            0.0,
+        dist = jnp.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        gradJ_u += 2 * (u - the_point["u"]) * the_box
-        gradJ_v += 2 * (v - the_point["v"]) * the_box
+        dist = jnp.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / jnp.sum(weight)
+        gradJ_u += 2 * (u - the_point["u"]) * weight
+        gradJ_v += 2 * (v - the_point["v"]) * weight
 
     gradJ = jnp.stack([gradJ_u, gradJ_v, gradJ_w], axis=0).flatten()
     return gradJ * Cp

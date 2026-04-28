@@ -303,7 +303,7 @@ def calculate_smoothness_gradient(
     return y.flatten()
 
 
-def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
+def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, power=2):
     """
     Calculates the cost function related to point observations. A mean square error cost
     function term is applied to points that are within the sphere of influence
@@ -339,18 +339,17 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     for the_point in point_list:
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
-        the_box = np.where(
-            np.logical_and.reduce(
-                (
-                    np.abs(x - the_point["x"]) < roi,
-                    np.abs(y - the_point["y"]) < roi,
-                    np.abs(z - the_point["z"]) < roi,
-                )
-            )
+
+        dist = np.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        J += np.sum(
-            ((u[the_box] - the_point["u"]) ** 2 + (v[the_box] - the_point["v"]) ** 2)
-        )
+        dist = np.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / np.max(weight)
+
+        J += np.sum(weight * ((u - the_point["u"]) ** 2 + (v - the_point["v"]) ** 2))
 
     return J * Cp
 
@@ -392,17 +391,16 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     gradJ_w = np.zeros_like(u)
 
     for the_point in point_list:
-        the_box = np.where(
-            np.logical_and.reduce(
-                (
-                    np.abs(x - the_point["x"]) < roi,
-                    np.abs(y - the_point["y"]) < roi,
-                    np.abs(z - the_point["z"]) < roi,
-                )
-            )
+        dist = np.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        gradJ_u[the_box] += 2 * (u[the_box] - the_point["u"])
-        gradJ_v[the_box] += 2 * (v[the_box] - the_point["v"])
+        dist = np.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / np.max(weight)
+        gradJ_u += 2 * weight * (u - the_point["u"])
+        gradJ_v += 2 * weight * (v - the_point["v"])
 
     gradJ = np.stack([gradJ_u, gradJ_v, gradJ_w], axis=0).flatten()
     return gradJ * Cp

@@ -538,10 +538,20 @@ def test_point_cost():
 
     my_point1 = {"x": 0, "y": 0, "z": 0, "u": 2.0, "v": 2.0, "w": 0.0}
     cost = pydda.cost_functions.calculate_point_cost(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     grad = pydda.cost_functions.calculate_point_gradient(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
 
     assert cost > 0
@@ -551,19 +561,39 @@ def test_point_cost():
     my_point2 = {"x": 3, "y": 3, "z": 0, "u": 2.0, "v": 2.0, "w": 0.0}
 
     cost = pydda.cost_functions.calculate_point_cost(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     grad = pydda.cost_functions.calculate_point_gradient(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     assert cost > 0
     assert np.all(grad >= 0)
 
     cost = pydda.cost_functions.calculate_point_cost(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     grad = pydda.cost_functions.calculate_point_gradient(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     assert cost > 0
     assert ~np.all(grad >= 0)
@@ -571,10 +601,20 @@ def test_point_cost():
     my_point1 = {"x": 0, "y": 0, "z": 0, "u": 1.0, "v": 1.0, "w": 0.0}
     my_point2 = {"x": 3, "y": 3, "z": 0, "u": 1.0, "v": 1.0, "w": 0.0}
     cost = pydda.cost_functions.calculate_point_cost(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     grad = pydda.cost_functions.calculate_point_gradient(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     assert cost == 0
     assert np.all(grad == 0)
@@ -591,10 +631,20 @@ def test_point_cost_jax():
 
     my_point1 = {"x": 0, "y": 0, "z": 0, "u": 2.0, "v": 2.0, "w": 0.0}
     cost = pydda.cost_functions.jax.calculate_point_cost(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     grad = pydda.cost_functions.jax.calculate_point_gradient(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
 
     assert cost > 0
@@ -604,19 +654,39 @@ def test_point_cost_jax():
     my_point2 = {"x": 3, "y": 3, "z": 0, "u": 2.0, "v": 2.0, "w": 0.0}
 
     cost = pydda.cost_functions.jax.calculate_point_cost(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     grad = pydda.cost_functions.jax.calculate_point_gradient(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     assert cost > 0
     assert np.all(grad >= 0)
 
     cost = pydda.cost_functions.jax.calculate_point_cost(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     grad = pydda.cost_functions.jax.calculate_point_gradient(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     assert cost > 0
     assert ~np.all(grad >= 0)
@@ -624,10 +694,20 @@ def test_point_cost_jax():
     my_point1 = {"x": 0, "y": 0, "z": 0, "u": 1.0, "v": 1.0, "w": 0.0}
     my_point2 = {"x": 3, "y": 3, "z": 0, "u": 1.0, "v": 1.0, "w": 0.0}
     cost = pydda.cost_functions.jax.calculate_point_cost(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     grad = pydda.cost_functions.jax.calculate_point_gradient(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     assert cost == 0
     assert np.all(grad == 0)
@@ -646,10 +726,20 @@ def test_point_cost_tf():
 
     my_point1 = {"x": 0, "y": 0, "z": 0, "u": 2.0, "v": 2.0, "w": 0.0}
     cost = pydda.cost_functions.tf.calculate_point_cost(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     grad = pydda.cost_functions.tf.calculate_point_gradient(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
 
     assert cost.numpy() > 0
@@ -659,19 +749,39 @@ def test_point_cost_tf():
     my_point2 = {"x": 3, "y": 3, "z": 0, "u": 2.0, "v": 2.0, "w": 0.0}
 
     cost = pydda.cost_functions.tf.calculate_point_cost(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     grad = pydda.cost_functions.tf.calculate_point_gradient(
-        u, v, x, y, z, [my_point1], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1],
     )
     assert cost.numpy() > 0
     assert tf.math.reduce_all(grad >= 0)
 
     cost = pydda.cost_functions.tf.calculate_point_cost(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     grad = pydda.cost_functions.tf.calculate_point_gradient(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     assert cost.numpy() > 0
     assert ~tf.math.reduce_all(grad >= 0)
@@ -679,10 +789,20 @@ def test_point_cost_tf():
     my_point1 = {"x": 0, "y": 0, "z": 0, "u": 1.0, "v": 1.0, "w": 0.0}
     my_point2 = {"x": 3, "y": 3, "z": 0, "u": 1.0, "v": 1.0, "w": 0.0}
     cost = pydda.cost_functions.tf.calculate_point_cost(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     grad = pydda.cost_functions.tf.calculate_point_gradient(
-        u, v, x, y, z, [my_point1, my_point2], roi=2.0
+        u,
+        v,
+        x,
+        y,
+        z,
+        [my_point1, my_point2],
     )
     assert cost.numpy() == 0
     assert tf.math.reduce_all(grad == 0)
