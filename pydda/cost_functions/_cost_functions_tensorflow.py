@@ -333,23 +333,18 @@ def calculate_point_cost(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     for the_point in point_list:
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
-        xp = tf.ones_like(x) * the_point["x"]
-        yp = tf.ones_like(y) * the_point["y"]
-        zp = tf.ones_like(z) * the_point["z"]
         up = tf.ones_like(u) * the_point["u"]
         vp = tf.ones_like(v) * the_point["v"]
-
-        the_box = tf.where(
-            tf.math.logical_and(
-                tf.math.logical_and(
-                    tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi
-                ),
-                tf.math.abs(z - zp) < roi,
-            ),
-            1.0,
-            0.0,
+        dist = tf.math.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        J.assign_add(tf.math.reduce_sum(((u - up) ** 2 + (v - vp) ** 2) * the_box))
+        dist = tf.math.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / tf.reduce_max(weight)
+
+        J.assign_add(tf.math.reduce_sum(((u - up) ** 2 + (v - vp) ** 2) * weight))
 
     return J * Cp
 
@@ -394,24 +389,19 @@ def calculate_point_gradient(u, v, x, y, z, point_list, Cp=1e-3, roi=500.0):
     for the_point in point_list:
         # Instead of worrying about whole domain, just find points in radius of influence
         # Since we know that the weight will be zero outside the sphere of influence anyways
-        xp = tf.ones_like(x, dtype=tf.float32) * the_point["x"]
-        yp = tf.ones_like(y, dtype=tf.float32) * the_point["y"]
-        zp = tf.ones_like(z, dtype=tf.float32) * the_point["z"]
         up = tf.ones_like(u, dtype=tf.float32) * the_point["u"]
         vp = tf.ones_like(v, dtype=tf.float32) * the_point["v"]
 
-        the_box = tf.where(
-            tf.math.logical_and(
-                tf.math.logical_and(
-                    tf.math.abs(x - xp) < roi, tf.math.abs(y - yp) < roi
-                ),
-                tf.math.abs(z - zp) < roi,
-            ),
-            1.0,
-            0.0,
+        dist = tf.math.sqrt(
+            (x - the_point["x"]) ** 2
+            + (y - the_point["y"]) ** 2
+            + (z - the_point["z"]) ** 2
         )
-        gradJ_u.assign_add((2 * (u - up) * the_box))
-        gradJ_v.assign_add((2 * (v - vp) * the_box))
+        dist = tf.math.maximum(dist, 1.0)
+        weight = 1 / dist**2
+        weight = weight / tf.reduce_max(weight)
+        gradJ_u.assign_add((2 * (u - up) * weight))
+        gradJ_v.assign_add((2 * (v - vp) * weight))
     gradJ = tf.stack([gradJ_u, gradJ_v, gradJ_w], axis=0)
     gradJ = tf.reshape(gradJ, (3 * np.prod(u.shape),))
     return gradJ * Cp
