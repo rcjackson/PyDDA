@@ -233,8 +233,7 @@ def plot_horiz_xsection_streamlines(
             linewidths=2,
         )
         cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
-        cs.cmap.set_under(color="white", alpha=0)
-        cs.cmap.set_bad(color="white", alpha=0)
+        cs.cmap.with_extremes(under="white", bad="white")
         ax.clabel(cs)
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")
@@ -253,7 +252,7 @@ def plot_horiz_xsection_streamlines(
                         grid_y[level, :, :],
                         bca,
                         levels=[bca_min, bca_max],
-                        color="k",
+                        colors="k",
                     )
 
     if axes_labels_flag is True:
@@ -477,9 +476,7 @@ def plot_horiz_xsection_streamlines_map(
                 extend="both",
             )
             cs.set_clim([np.min(u_vel_contours), np.max(u_vel_contours)])
-            cs.cmap.set_under(color="white", alpha=0)
-            cs.cmap.set_over(color="white", alpha=0)
-            cs.cmap.set_bad(color="white", alpha=0)
+            cs.cmap.with_extremes(under="white", bad="white", over="white")
             ax.clabel(cs)
             if colorbar_contour_flag is True:
                 plt.colorbar(
@@ -509,9 +506,7 @@ def plot_horiz_xsection_streamlines_map(
                 extend="both",
             )
             cs.set_clim([np.min(v_vel_contours), np.max(v_vel_contours)])
-            cs.cmap.set_under(color="white", alpha=0)
-            cs.cmap.set_over(color="white", alpha=0)
-            cs.cmap.set_bad(color="white", alpha=0)
+            cs.cmap.with_extremes(under="white", bad="white", over="white")
             ax.clabel(cs)
             if colorbar_contour_flag is True:
                 plt.colorbar(
@@ -541,9 +536,7 @@ def plot_horiz_xsection_streamlines_map(
                 extend="both",
             )
             cs.set_clim([np.min(w_vel_contours), np.max(w_vel_contours)])
-            cs.cmap.set_under(color="white", alpha=0)
-            cs.cmap.set_over(color="white", alpha=0)
-            cs.cmap.set_bad(color="white", alpha=0)
+            cs.cmap.with_extremes(under="white", bad="white", over="white")
             ax.clabel(cs)
             if colorbar_contour_flag is True:
                 plt.colorbar(
@@ -574,8 +567,7 @@ def plot_horiz_xsection_streamlines_map(
                 levels=wind_vel_contours,
                 linewidths=2,
             )
-            cs.cmap.set_under(color="white", alpha=0)
-            cs.cmap.set_bad(color="white", alpha=0)
+            cs.cmap.with_extremes(under="white", bad="white")
 
             ax.clabel(cs)
             if colorbar_contour_flag is True:
@@ -607,7 +599,7 @@ def plot_horiz_xsection_streamlines_map(
                         grid_lat[:, :],
                         bca,
                         levels=[bca_min, bca_max],
-                        color="k",
+                        colors="k",
                         zorder=1,
                     )
 
@@ -844,8 +836,7 @@ def plot_xz_xsection_streamlines(
             linewidths=2,
         )
         cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
-        cs.cmap.set_under(color="white", alpha=0)
-        cs.cmap.set_bad(color="white", alpha=0)
+        cs.cmap.with_extremes(under="white", bad="white")
         ax.clabel(cs)
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")
@@ -1082,8 +1073,7 @@ def plot_yz_xsection_streamlines(
             alpha=contour_alpha,
         )
         cs.set_clim([np.min(wind_vel_contours), np.max(wind_vel_contours)])
-        cs.cmap.set_under(color="white", alpha=0)
-        cs.cmap.set_bad(color="white", alpha=0)
+        cs.cmap.with_extremes(under="white", bad="white")
         ax.clabel(cs)
         if colorbar_contour_flag is True:
             plt.colorbar(cs, ax=ax, label="|V| [m/s]")

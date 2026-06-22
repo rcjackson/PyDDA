@@ -11,10 +11,38 @@ import math
 import xarray as xr
 
 from scipy.interpolate import interp1d
+from scipy.ndimage import convolve1d
 from scipy.optimize import fmin_l_bfgs_b
 from scipy.signal import savgol_filter
 from .auglag import auglag
 from ..io import read_from_pyart_grid
+
+_LEISE_KERNEL = np.array([-1 / 16, 1 / 4, 5 / 8, 1 / 4, -1 / 16])
+
+
+def _apply_low_pass_filter(
+    winds, filter_type, filter_window, filter_order, leise_nstep
+):
+    """Smooth the (3, nz, ny, nx) wind array in place along all spatial axes."""
+    if filter_type not in ("savgol", "leise"):
+        raise ValueError(
+            "filter_type must be 'savgol' or 'leise', got %r" % filter_type
+        )
+    for c in range(3):
+        for axis in range(winds[c].ndim):
+            if filter_type == "savgol":
+                winds[c] = savgol_filter(
+                    winds[c], filter_window, filter_order, axis=axis
+                )
+            else:
+                if winds[c].shape[axis] < 5:
+                    continue
+                for _ in range(leise_nstep):
+                    winds[c] = convolve1d(
+                        winds[c], _LEISE_KERNEL, axis=axis, mode="mirror"
+                    )
+    return winds
+
 
 try:
     import tensorflow_probability as tfp
@@ -220,8 +248,10 @@ def _get_dd_wind_field_scipy(
     weights_bg=None,
     max_iterations=1000,
     mask_w_outside_opt=True,
+    filter_type="savgol",
     filter_window=5,
     filter_order=3,
+    leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=True,
@@ -693,7 +723,7 @@ def _get_dd_wind_field_scipy(
     winds = np.stack([winds[0], winds[1], winds[2]])
     winds = winds.flatten()
     if low_pass_filter is True:
-        print("Applying low pass filter to wind field...")
+        print("Applying %s low pass filter to wind field..." % filter_type)
         winds = np.reshape(
             winds,
             (
@@ -703,15 +733,9 @@ def _get_dd_wind_field_scipy(
                 parameters.grid_shape[2],
             ),
         )
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
+        winds = _apply_low_pass_filter(
+            winds, filter_type, filter_window, filter_order, leise_nstep
+        )
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -764,6 +788,60 @@ def _get_dd_wind_field_scipy(
     w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
+    num_radars_field = {}
+    num_radars_field["standard_name"] = "number_of_radars_used"
+    num_radars_field["long_name"] = (
+        "number of radars with valid observations at each grid point"
+    )
+    num_radars_field["units"] = "1"
+    num_radars_field["min_bca"] = min_bca
+    num_radars_field["max_bca"] = max_bca
+    background_field = {}
+    background_field["standard_name"] = "background_wind_used"
+    background_field["long_name"] = (
+        "1 if background sounding wind was applied at this grid point "
+        "(radar coverage absent or below BCA threshold), 0 otherwise"
+    )
+    background_field["units"] = "1"
+    point_obs_field = {}
+    point_obs_field["standard_name"] = "point_observation_used"
+    point_obs_field["long_name"] = (
+        "1 if a surface point observation was within the radius of influence "
+        "of this grid point, 0 otherwise"
+    )
+    point_obs_field["units"] = "1"
+    point_obs_field["roi"] = parameters.roi
+    quality_flag_field = {}
+    quality_flag_field["standard_name"] = "wind_retrieval_quality_flag"
+    quality_flag_field["long_name"] = (
+        "Bit-encoded data quality flag: bits 0-3 = number of radars used (0-15), "
+        "bit 4 = background sounding wind used, bit 5 = point observation used"
+    )
+    quality_flag_field["units"] = "1"
+    quality_flag_field["flag_masks"] = [0x0F, 0x10, 0x20]
+    quality_flag_field["flag_meanings"] = (
+        "num_radars_used background_wind_used point_observation_used"
+    )
+
+    num_radars_used = np.asarray(parameters.weights).sum(axis=0).astype(np.int8)
+    background_used = (np.asarray(parameters.bg_weights) > 0).astype(np.int8)
+
+    point_obs_used = np.zeros(parameters.grid_shape, dtype=np.int8)
+    if parameters.point_list is not None:
+        x_grid = np.asarray(parameters.x)
+        y_grid = np.asarray(parameters.y)
+        z_grid = np.asarray(parameters.z)
+        for the_point in parameters.point_list:
+            dist = np.sqrt(
+                (x_grid - the_point["x"]) ** 2
+                + (y_grid - the_point["y"]) ** 2
+                + (z_grid - the_point["z"]) ** 2
+            )
+            point_obs_used[dist <= parameters.roi] = 1
+
+    quality_flag = (
+        num_radars_used | (background_used << 4) | (point_obs_used << 5)
+    ).astype(np.int8)
 
     new_grid_list = []
 
@@ -776,6 +854,26 @@ def _get_dd_wind_field_scipy(
         )
         grid["w"] = xr.DataArray(
             np.expand_dims(w, 0), dims=("time", "z", "y", "x"), attrs=w_field
+        )
+        grid["num_radars_used"] = xr.DataArray(
+            np.expand_dims(num_radars_used, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=num_radars_field,
+        )
+        grid["background_wind_used"] = xr.DataArray(
+            np.expand_dims(background_used, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=background_field,
+        )
+        grid["point_obs_used"] = xr.DataArray(
+            np.expand_dims(point_obs_used, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=point_obs_field,
+        )
+        grid["wind_retrieval_quality_flag"] = xr.DataArray(
+            np.expand_dims(quality_flag, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=quality_flag_field,
         )
         new_grid_list.append(grid)
 
@@ -812,8 +910,10 @@ def _get_dd_wind_field_tensorflow(
     weights_bg=None,
     max_iterations=200,
     mask_w_outside_opt=True,
+    filter_type="savgol",
     filter_window=5,
     filter_order=3,
+    leise_nstep=1,
     min_bca=30.0,
     max_bca=150.0,
     upper_bc=True,
@@ -1218,7 +1318,7 @@ def _get_dd_wind_field_tensorflow(
     # """
 
     if low_pass_filter:
-        print("Applying low pass filter to wind field...")
+        print("Applying %s low pass filter to wind field..." % filter_type)
         winds = np.asarray(winds)
         winds = np.reshape(
             winds,
@@ -1229,15 +1329,9 @@ def _get_dd_wind_field_tensorflow(
                 parameters.grid_shape[2],
             ),
         )
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=0)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=1)
-        winds[0] = savgol_filter(winds[0], filter_window, filter_order, axis=2)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=0)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=1)
-        winds[1] = savgol_filter(winds[1], filter_window, filter_order, axis=2)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=0)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=1)
-        winds[2] = savgol_filter(winds[2], filter_window, filter_order, axis=2)
+        winds = _apply_low_pass_filter(
+            winds, filter_type, filter_window, filter_order, leise_nstep
+        )
         winds = np.stack([winds[0], winds[1], winds[2]])
         winds = winds.flatten()
 
@@ -1289,6 +1383,60 @@ def _get_dd_wind_field_tensorflow(
     w_field["units"] = "m/s"
     w_field["min_bca"] = min_bca
     w_field["max_bca"] = max_bca
+    num_radars_field = {}
+    num_radars_field["standard_name"] = "number_of_radars_used"
+    num_radars_field["long_name"] = (
+        "number of radars with valid observations at each grid point"
+    )
+    num_radars_field["units"] = "1"
+    num_radars_field["min_bca"] = min_bca
+    num_radars_field["max_bca"] = max_bca
+    background_field = {}
+    background_field["standard_name"] = "background_wind_used"
+    background_field["long_name"] = (
+        "1 if background sounding wind was applied at this grid point "
+        "(radar coverage absent or below BCA threshold), 0 otherwise"
+    )
+    background_field["units"] = "1"
+    point_obs_field = {}
+    point_obs_field["standard_name"] = "point_observation_used"
+    point_obs_field["long_name"] = (
+        "1 if a surface point observation was within the radius of influence "
+        "of this grid point, 0 otherwise"
+    )
+    point_obs_field["units"] = "1"
+    point_obs_field["roi"] = parameters.roi
+    quality_flag_field = {}
+    quality_flag_field["standard_name"] = "wind_retrieval_quality_flag"
+    quality_flag_field["long_name"] = (
+        "Bit-encoded data quality flag: bits 0-3 = number of radars used (0-15), "
+        "bit 4 = background sounding wind used, bit 5 = point observation used"
+    )
+    quality_flag_field["units"] = "1"
+    quality_flag_field["flag_masks"] = [0x0F, 0x10, 0x20]
+    quality_flag_field["flag_meanings"] = (
+        "num_radars_used background_wind_used point_observation_used"
+    )
+
+    num_radars_used = np.asarray(parameters.weights).sum(axis=0).astype(np.int8)
+    background_used = (np.asarray(parameters.bg_weights) > 0).astype(np.int8)
+
+    point_obs_used = np.zeros(parameters.grid_shape, dtype=np.int8)
+    if parameters.point_list is not None:
+        x_grid = np.asarray(parameters.x)
+        y_grid = np.asarray(parameters.y)
+        z_grid = np.asarray(parameters.z)
+        for the_point in parameters.point_list:
+            dist = np.sqrt(
+                (x_grid - the_point["x"]) ** 2
+                + (y_grid - the_point["y"]) ** 2
+                + (z_grid - the_point["z"]) ** 2
+            )
+            point_obs_used[dist <= parameters.roi] = 1
+
+    quality_flag = (
+        num_radars_used | (background_used << 4) | (point_obs_used << 5)
+    ).astype(np.int8)
 
     new_grid_list = []
 
@@ -1301,6 +1449,26 @@ def _get_dd_wind_field_tensorflow(
         )
         grid["w"] = xr.DataArray(
             np.expand_dims(w, 0), dims=("time", "z", "y", "x"), attrs=w_field
+        )
+        grid["num_radars_used"] = xr.DataArray(
+            np.expand_dims(num_radars_used, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=num_radars_field,
+        )
+        grid["background_wind_used"] = xr.DataArray(
+            np.expand_dims(background_used, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=background_field,
+        )
+        grid["point_obs_used"] = xr.DataArray(
+            np.expand_dims(point_obs_used, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=point_obs_field,
+        )
+        grid["wind_retrieval_quality_flag"] = xr.DataArray(
+            np.expand_dims(quality_flag, 0),
+            dims=("time", "z", "y", "x"),
+            attrs=quality_flag_field,
         )
         new_grid_list.append(grid)
 
@@ -1415,14 +1583,26 @@ def get_dd_wind_field(
         If set to true, vertical winds outside the multiple doppler lobes will
         be masked, i.e. if less than 2 radars provide coverage for a given
         point.
+    filter_type: str (one of "savgol", "leise")
+        Which low-pass filter to apply after the optimization. ``"savgol"``
+        (default) uses ``scipy.signal.savgol_filter`` along each axis with the
+        ``filter_window`` / ``filter_order`` parameters below. ``"leise"`` uses
+        the iterated 5-point Leise kernel ([-1/16, 1/4, 5/8, 1/4, -1/16]) with
+        mirror boundaries, controlled by ``leise_nstep``.
     filter_window: int
-        Window size to use for the low pass filter. A larger window will
-        increase the number of points factored into the polynomial fit for
-        the filter, and hence will increase the smoothness.
+        Window size to use for the Savitzky-Golay low pass filter. A larger
+        window will increase the number of points factored into the polynomial
+        fit for the filter, and hence will increase the smoothness. Only used
+        when ``filter_type="savgol"``.
     filter_order: int
-        The order of the polynomial to use for the low pass filter. Higher
-        order polynomials allow for the retention of smaller scale features
-        but may also not remove enough noise.
+        The order of the polynomial to use for the Savitzky-Golay low pass
+        filter. Higher order polynomials allow for the retention of smaller
+        scale features but may also not remove enough noise. Only used when
+        ``filter_type="savgol"``.
+    leise_nstep: int
+        Number of Leise filter passes to apply along each spatial axis. Each
+        pass narrows the passband further. Only used when
+        ``filter_type="leise"``.
     min_bca: float
         Minimum beam crossing angle in degrees between two radars. 30.0 is the
         typical value used in many publications.
@@ -1465,7 +1645,25 @@ def get_dd_wind_field(
     =======
     new_grid_list: list
         A list of Py-ART grids containing the derived wind fields. These fields
-        are displayable by the visualization module.
+        are displayable by the visualization module. In addition to *u*, *v*,
+        and *w*, each grid will contain two data quality fields:
+
+        - *num_radars_used*: integer count of radars with valid observations
+          at each grid point, accounting for beam-crossing-angle thresholds.
+          A value of 0 means no radar coverage; 2 or more indicates
+          multi-Doppler geometry.
+        - *background_wind_used*: 1 where the sounding background wind
+          constraint was active (i.e., radar coverage was absent or below the
+          BCA threshold), 0 where radar observations were sufficient.
+        - *point_obs_used*: 1 where at least one surface point observation
+          (e.g. IEM station) fell within *roi* metres of the grid point,
+          0 otherwise.
+        - *wind_retrieval_quality_flag*: bit-encoded summary of all three
+          quality indicators. Bits 0–3 encode the number of radars used
+          (0–15); bit 4 is set if background sounding was used; bit 5 is set
+          if a point observation was within the radius of influence. Decode
+          with ``flag & 0x0F``, ``(flag >> 4) & 1``, ``(flag >> 5) & 1``.
+
     parameters: struct
         The parameters used in the generation of the Multi-Doppler wind field.
     """
