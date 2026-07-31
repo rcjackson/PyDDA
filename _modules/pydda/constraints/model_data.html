@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.constraints.model_data &#8212; PyDDA 2.3.0 documentation</title>
+    <title>pydda.constraints.model_data &#8212; PyDDA 2.5.0 documentation</title>
   
   
   
@@ -26,27 +26,28 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../../_static/documentation_options.js?v=3c4615cf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/constraints/model_data';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
@@ -54,7 +55,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.3.0" />
+  <meta name="docsearch:version" content="2.5.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -72,7 +73,9 @@
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -120,7 +123,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
+    <p class="title logo__title">PyDDA 2.5.0 documentation</p>
   
 </a></div>
     
@@ -182,11 +185,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -271,11 +281,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
@@ -881,12 +898,75 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_uv_grid_relative_to_true_north</span><span class="p">(</span>
+    <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lov</span><span class="o">=-</span><span class="mf">97.5</span><span class="p">,</span> <span class="n">truelat1</span><span class="o">=</span><span class="mf">38.5</span><span class="p">,</span> <span class="n">truelat2</span><span class="o">=</span><span class="mf">38.5</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    HRRR (and other WRF-based models) output u and v components that are</span>
+<span class="sd">    relative to the model&#39;s Lambert Conformal Conic grid rather than true</span>
+<span class="sd">    north. This rotates them to earth-relative (true north) components</span>
+<span class="sd">    using the standard WRF/NCEP grid-rotation formula (equivalent to the</span>
+<span class="sd">    DCOMPUTEUVMET routine used by wrf-python&#39;s ``uvmet`` diagnostic).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    u, v: array_like</span>
+<span class="sd">        Grid-relative u and v wind components. Must be broadcastable</span>
+<span class="sd">        against lon/lat.</span>
+<span class="sd">    lon, lat: array_like</span>
+<span class="sd">        Longitude (in the range [-180, 180]) and latitude of each point,</span>
+<span class="sd">        broadcastable against u and v.</span>
+<span class="sd">    lov: float</span>
+<span class="sd">        Standard longitude (line of view/center longitude) of the Lambert</span>
+<span class="sd">        Conformal Conic projection, in degrees. Defaults to -97.5, the</span>
+<span class="sd">        value used by the operational CONUS HRRR grid.</span>
+<span class="sd">    truelat1, truelat2: float</span>
+<span class="sd">        The two standard (true) latitudes of the Lambert Conformal Conic</span>
+<span class="sd">        projection, in degrees. Default to 38.5, the values used by the</span>
+<span class="sd">        operational CONUS HRRR grid (a tangent cone).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    u_true, v_true: array_like</span>
+<span class="sd">        The u and v wind components relative to true north.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">rad_per_deg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">truelat1</span><span class="p">,</span> <span class="n">truelat2</span><span class="p">):</span>
+        <span class="n">cone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">truelat1</span><span class="p">)</span> <span class="o">*</span> <span class="n">rad_per_deg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cone</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">truelat1</span> <span class="o">*</span> <span class="n">rad_per_deg</span><span class="p">))</span>
+            <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">truelat2</span> <span class="o">*</span> <span class="n">rad_per_deg</span><span class="p">))</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span> <span class="o">+</span> <span class="n">truelat2</span> <span class="o">*</span> <span class="n">rad_per_deg</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+            <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">4.0</span> <span class="o">+</span> <span class="n">truelat1</span> <span class="o">*</span> <span class="n">rad_per_deg</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+        <span class="p">)</span>
+
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">lon</span> <span class="o">-</span> <span class="n">lov</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">&gt;</span> <span class="mf">180.0</span><span class="p">,</span> <span class="n">diff</span> <span class="o">-</span> <span class="mf">360.0</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">diff</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="n">diff</span> <span class="o">+</span> <span class="mf">360.0</span><span class="p">,</span> <span class="n">diff</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">diff</span> <span class="o">*</span> <span class="n">cone</span> <span class="o">*</span> <span class="n">rad_per_deg</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sign</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+    <span class="n">cos_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">sin_alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+
+    <span class="n">u_true</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">sin_alpha</span> <span class="o">+</span> <span class="n">u</span> <span class="o">*</span> <span class="n">cos_alpha</span>
+    <span class="n">v_true</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">cos_alpha</span> <span class="o">-</span> <span class="n">u</span> <span class="o">*</span> <span class="n">sin_alpha</span>
+    <span class="k">return</span> <span class="n">u_true</span><span class="p">,</span> <span class="n">v_true</span>
+
+
 <div class="viewcode-block" id="add_hrrr_constraint_to_grid">
 <a class="viewcode-back" href="../../../dev_reference/generated/pydda.constraints.add_hrrr_constraint_to_grid.html#pydda.constraints.add_hrrr_constraint_to_grid">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">add_hrrr_constraint_to_grid</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_hrrr_constraint_to_grid</span><span class="p">(</span>
+    <span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;nearest&quot;</span><span class="p">,</span> <span class="n">lov</span><span class="o">=-</span><span class="mf">97.5</span><span class="p">,</span> <span class="n">truelat1</span><span class="o">=</span><span class="mf">38.5</span><span class="p">,</span> <span class="n">truelat2</span><span class="o">=</span><span class="mf">38.5</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function will read an HRRR GRIB2 file and create the constraining</span>
-<span class="sd">    u, v, and w fields for the model constraint</span>
+<span class="sd">    u, v, and w fields for the model constraint.</span>
+
+<span class="sd">    The u and v winds in the HRRR GRIB2 file are relative to the HRRR&#39;s</span>
+<span class="sd">    Lambert Conformal Conic grid rather than true north. This function</span>
+<span class="sd">    rotates them to true north (earth-relative) components before</span>
+<span class="sd">    interpolating them onto the analysis grid.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -898,6 +978,16 @@
 <span class="sd">    method: str</span>
 <span class="sd">            Interpolation method: &#39;nearest&#39; for nearest neighbor,</span>
 <span class="sd">            &#39;linear&#39; for linear.</span>
+<span class="sd">    lov: float</span>
+<span class="sd">        The standard longitude (center longitude) of the HRRR&#39;s Lambert</span>
+<span class="sd">        Conformal Conic projection, in degrees. Only change this if the</span>
+<span class="sd">        input file uses a different Lambert Conformal Conic grid than the</span>
+<span class="sd">        operational CONUS HRRR.</span>
+<span class="sd">    truelat1, truelat2: float</span>
+<span class="sd">        The two standard (true) latitudes of the HRRR&#39;s Lambert Conformal</span>
+<span class="sd">        Conic projection, in degrees. Only change these if the input file</span>
+<span class="sd">        uses a different Lambert Conformal Conic grid than the</span>
+<span class="sd">        operational CONUS HRRR.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -926,6 +1016,19 @@
     <span class="n">lat</span> <span class="o">=</span> <span class="n">the_grib</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:]</span>
     <span class="n">lon</span> <span class="o">=</span> <span class="n">the_grib</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:]</span>
     <span class="n">lon</span><span class="p">[</span><span class="n">lon</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">]</span> <span class="o">=</span> <span class="n">lon</span><span class="p">[</span><span class="n">lon</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">]</span> <span class="o">-</span> <span class="mi">360</span>
+
+    <span class="c1"># HRRR&#39;s u and v are grid relative (relative to its Lambert Conformal</span>
+    <span class="c1"># Conic grid). Rotate them to true north before interpolating onto</span>
+    <span class="c1"># the analysis grid.</span>
+    <span class="n">u_true</span><span class="p">,</span> <span class="n">v_true</span> <span class="o">=</span> <span class="n">_uv_grid_relative_to_true_north</span><span class="p">(</span>
+        <span class="n">grb_u</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:],</span>
+        <span class="n">grb_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:],</span>
+        <span class="n">lon</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+        <span class="n">lat</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+        <span class="n">lov</span><span class="o">=</span><span class="n">lov</span><span class="p">,</span>
+        <span class="n">truelat1</span><span class="o">=</span><span class="n">truelat1</span><span class="p">,</span>
+        <span class="n">truelat2</span><span class="o">=</span><span class="n">truelat2</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Convert geometric height to geopotential height</span>
     <span class="n">EARTH_MEAN_RADIUS</span> <span class="o">=</span> <span class="mf">6.3781e6</span>
@@ -960,7 +1063,7 @@
     <span class="n">lat_flattened</span> <span class="o">=</span> <span class="n">lat_flattened</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span>
     <span class="n">height_flattened</span> <span class="o">=</span> <span class="n">height_flattened</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span>
 
-    <span class="n">u_flattened</span> <span class="o">=</span> <span class="n">grb_u</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">u_flattened</span> <span class="o">=</span> <span class="n">u_true</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">u_flattened</span> <span class="o">=</span> <span class="n">u_flattened</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
         <span class="n">u_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
@@ -977,7 +1080,7 @@
 
     <span class="n">u_new</span> <span class="o">=</span> <span class="n">u_interp</span><span class="p">(</span><span class="n">radar_grid_alt</span><span class="p">,</span> <span class="n">radar_grid_lat</span><span class="p">,</span> <span class="n">radar_grid_lon</span><span class="p">)</span>
 
-    <span class="n">v_flattened</span> <span class="o">=</span> <span class="n">grb_v</span><span class="o">.</span><span class="n">data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+    <span class="n">v_flattened</span> <span class="o">=</span> <span class="n">v_true</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="n">v_flattened</span> <span class="o">=</span> <span class="n">v_flattened</span><span class="p">[</span><span class="n">the_box</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;nearest&quot;</span><span class="p">:</span>
         <span class="n">v_interp</span> <span class="o">=</span> <span class="n">NearestNDInterpolator</span><span class="p">(</span>
@@ -1018,7 +1121,7 @@
     <span class="p">)</span>
 
     <span class="c1"># Free up memory</span>
-    <span class="k">del</span> <span class="n">grb_u</span><span class="p">,</span> <span class="n">grb_v</span><span class="p">,</span> <span class="n">grb_w</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span>
+    <span class="k">del</span> <span class="n">grb_u</span><span class="p">,</span> <span class="n">grb_v</span><span class="p">,</span> <span class="n">grb_w</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">u_true</span><span class="p">,</span> <span class="n">v_true</span>
     <span class="k">del</span> <span class="n">the_grib</span>
     <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">new_grid</span></div>
@@ -1052,8 +1155,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1087,7 +1190,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

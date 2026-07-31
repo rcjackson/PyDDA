@@ -5,7 +5,7 @@ Traceback (most recent call last):
   File "/usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/jupyter_core/utils/__init__.py", line 214, in ensure_async
     result = await obj
              ^^^^^^^^^
-  File "/usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/jupyter_client/channels.py", line 316, in get_msg
+  File "/usr/share/miniconda/envs/pydda-docs/lib/python3.14/site-packages/jupyter_client/channels.py", line 330, in get_msg
     raise Empty
 _queue.Empty
 

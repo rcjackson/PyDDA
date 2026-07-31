@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.initialization.wind_fields &#8212; PyDDA 2.3.0 documentation</title>
+    <title>pydda.initialization.wind_fields &#8212; PyDDA 2.5.0 documentation</title>
   
   
   
@@ -26,27 +26,28 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../../_static/documentation_options.js?v=3c4615cf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/initialization/wind_fields';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
@@ -54,7 +55,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.3.0" />
+  <meta name="docsearch:version" content="2.5.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -72,7 +73,9 @@
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -120,7 +123,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
+    <p class="title logo__title">PyDDA 2.5.0 documentation</p>
   
 </a></div>
     
@@ -182,11 +185,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -271,11 +281,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
@@ -855,6 +872,166 @@
 
 
 
+<div class="viewcode-block" id="make_initialization_from_iem_obs">
+<a class="viewcode-back" href="../../../dev_reference/generated/pydda.initialization.make_initialization_from_iem_obs.html#pydda.initialization.make_initialization_from_iem_obs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_initialization_from_iem_obs</span><span class="p">(</span>
+    <span class="n">Grid</span><span class="p">,</span> <span class="n">station_obs</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">power</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an initial 3D wind field by inverse distance weighting (IDW)</span>
+<span class="sd">    interpolation of Iowa Environmental Mesonet surface observations.</span>
+
+<span class="sd">    Surface station winds are used to compute horizontal anomalies relative to</span>
+<span class="sd">    an optional sounding background.  The anomalies are spread horizontally via</span>
+<span class="sd">    IDW and added uniformly at every vertical level.  When no sounding is</span>
+<span class="sd">    supplied the background is zero (i.e. the IDW result stands alone).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Grid : xarray.Dataset</span>
+<span class="sd">        The PyDDA analysis grid.  Must contain ``x``, ``y``, ``z``,</span>
+<span class="sd">        ``point_x``, ``point_y``, and ``point_z`` coordinate variables.</span>
+<span class="sd">    station_obs : list of dict</span>
+<span class="sd">        Surface observations, typically the output of</span>
+<span class="sd">        :func:`pydda.constraints.get_iem_obs`.  Each dict must contain the</span>
+<span class="sd">        keys ``x``, ``y``, ``z``, ``u``, and ``v`` in the Grid&#39;s Cartesian</span>
+<span class="sd">        coordinate system (metres).</span>
+<span class="sd">    profile : pyart.core.HorizontalWindProfile or None</span>
+<span class="sd">        Optional vertical sounding profile used as the background wind field.</span>
+<span class="sd">        When provided the IDW step corrects only the horizontal anomalies</span>
+<span class="sd">        (departure from the sounding) and the sounding provides the vertical</span>
+<span class="sd">        structure.  When ``None`` the background is zero and the surface IDW</span>
+<span class="sd">        values are copied unchanged to every model level.</span>
+<span class="sd">    power : float</span>
+<span class="sd">        IDW distance-weighting exponent.  Higher values give more weight to</span>
+<span class="sd">        the nearest station.  Typical values are 1 or 2 (default ``2``).</span>
+<span class="sd">    vel_field : str or None</span>
+<span class="sd">        Name of the radar velocity field in *Grid* used to determine the</span>
+<span class="sd">        output grid shape.  ``None`` will auto-detect via</span>
+<span class="sd">        ``Grid.attrs[&quot;first_grid_name&quot;]``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Grid : xarray.Dataset</span>
+<span class="sd">        The input Grid with ``u``, ``v``, and ``w`` fields added or replaced.</span>
+<span class="sd">        ``w`` is set to zero everywhere because surface stations do not</span>
+<span class="sd">        observe vertical motion.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The horizontal IDW anomaly is applied identically at every height level.</span>
+<span class="sd">    This is equivalent to assuming that horizontal wind anomalies measured at</span>
+<span class="sd">    the surface are representative of the full column (a reasonable first</span>
+<span class="sd">    guess for a well-mixed boundary layer).  If a sounding *profile* is</span>
+<span class="sd">    given, that profile provides the height-varying mean, while the stations</span>
+<span class="sd">    supply the mesoscale horizontal structure.</span>
+
+<span class="sd">    The function raises ``ValueError`` if both *station_obs* is empty and</span>
+<span class="sd">    *profile* is ``None``, since there is no information to build a field.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pydda</span>
+<span class="sd">    &gt;&gt;&gt; Grid = pydda.io.read_grid(grid_file)</span>
+<span class="sd">    &gt;&gt;&gt; stn_obs = pydda.constraints.get_iem_obs(Grid)</span>
+<span class="sd">    &gt;&gt;&gt; Grid = pydda.initialization.make_initialization_from_iem_obs(</span>
+<span class="sd">    ...     Grid, stn_obs, profile=my_sounding</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">station_obs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;station_obs is empty and no sounding profile was provided. &quot;</span>
+            <span class="s2">&quot;At least one source of wind information is required.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">Grid</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;first_grid_name&quot;</span><span class="p">]</span>
+
+    <span class="n">grid_x</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># (nx,)</span>
+    <span class="n">grid_y</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># (ny,)</span>
+    <span class="n">grid_z</span> <span class="o">=</span> <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>  <span class="c1"># (nz,)</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_z</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid_x</span><span class="p">)</span>
+
+    <span class="c1"># --- vertical background from sounding or zeros ---</span>
+    <span class="k">if</span> <span class="n">profile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">u_interp_snd</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">u_wind</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span>
+        <span class="p">)</span>
+        <span class="n">v_interp_snd</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">profile</span><span class="o">.</span><span class="n">v_wind</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="s2">&quot;extrapolate&quot;</span>
+        <span class="p">)</span>
+        <span class="n">u_back</span> <span class="o">=</span> <span class="n">u_interp_snd</span><span class="p">(</span><span class="n">grid_z</span><span class="p">)</span>  <span class="c1"># (nz,)</span>
+        <span class="n">v_back</span> <span class="o">=</span> <span class="n">v_interp_snd</span><span class="p">(</span><span class="n">grid_z</span><span class="p">)</span>  <span class="c1"># (nz,)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">u_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nz</span><span class="p">)</span>
+        <span class="n">v_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nz</span><span class="p">)</span>
+
+    <span class="c1"># Broadcast background to full 3D shape</span>
+    <span class="n">u_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">u_back</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">v_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">v_back</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">w_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">station_obs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="c1"># Background only; w stays zero</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">station_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">station_obs</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">station_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">station_obs</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">station_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;z&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">station_obs</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">station_u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">station_obs</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">station_v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">station_obs</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="c1"># Anomaly of each station relative to sounding background at its height</span>
+        <span class="n">u_back_stn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">station_z</span><span class="p">,</span> <span class="n">grid_z</span><span class="p">,</span> <span class="n">u_back</span><span class="p">)</span>  <span class="c1"># (N,)</span>
+        <span class="n">v_back_stn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">interp</span><span class="p">(</span><span class="n">station_z</span><span class="p">,</span> <span class="n">grid_z</span><span class="p">,</span> <span class="n">v_back</span><span class="p">)</span>  <span class="c1"># (N,)</span>
+        <span class="n">u_anom</span> <span class="o">=</span> <span class="n">station_u</span> <span class="o">-</span> <span class="n">u_back_stn</span>  <span class="c1"># (N,)</span>
+        <span class="n">v_anom</span> <span class="o">=</span> <span class="n">station_v</span> <span class="o">-</span> <span class="n">v_back_stn</span>  <span class="c1"># (N,)</span>
+
+        <span class="c1"># Horizontal distances: (N, ny, nx)</span>
+        <span class="n">grid_xx</span><span class="p">,</span> <span class="n">grid_yy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">grid_x</span><span class="p">,</span> <span class="n">grid_y</span><span class="p">)</span>  <span class="c1"># (ny, nx) each</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid_xx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">station_x</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid_yy</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">station_y</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+        <span class="n">d_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Avoid division by zero when a grid point coincides with a station</span>
+        <span class="n">d_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">d_h</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">d_h</span><span class="o">**</span><span class="n">power</span>  <span class="c1"># (N, ny, nx)</span>
+        <span class="n">weights_norm</span> <span class="o">=</span> <span class="n">weights</span> <span class="o">/</span> <span class="n">weights</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># IDW-interpolated anomaly on the 2-D horizontal plane</span>
+        <span class="n">u_anom_2d</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights_norm</span> <span class="o">*</span> <span class="n">u_anom</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">v_anom_2d</span> <span class="o">=</span> <span class="p">(</span><span class="n">weights_norm</span> <span class="o">*</span> <span class="n">v_anom</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Add horizontal anomaly uniformly to every vertical level</span>
+        <span class="n">u_3d</span> <span class="o">+=</span> <span class="n">u_anom_2d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">v_3d</span> <span class="o">+=</span> <span class="n">v_anom_2d</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+    <span class="n">u_attrs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;u_wind&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">v_attrs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;v_wind&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">w_attrs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;w_wind&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;u&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">u_3d</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">u_attrs</span>
+    <span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">v_3d</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">v_attrs</span>
+    <span class="p">)</span>
+    <span class="n">Grid</span><span class="p">[</span><span class="s2">&quot;w&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">w_3d</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">w_attrs</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">Grid</span></div>
+
+
+
 <span class="k">def</span><span class="w"> </span><span class="nf">make_intialization_from_hrrr</span><span class="p">(</span><span class="n">Grid</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function will read an HRRR GRIB2 file and return initial guess</span>
@@ -1002,8 +1179,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1037,7 +1214,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

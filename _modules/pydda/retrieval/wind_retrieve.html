@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 2.3.0 documentation</title>
+    <title>pydda.retrieval.wind_retrieve &#8212; PyDDA 2.5.0 documentation</title>
   
   
   
@@ -26,27 +26,28 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../../_static/documentation_options.js?v=c3c8ae58"></script>
+    <script src="../../../_static/documentation_options.js?v=3c4615cf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pydda/retrieval/wind_retrieve';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
@@ -54,7 +55,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.3.0" />
+  <meta name="docsearch:version" content="2.5.0" />
   
     
     <script src="../../../_static/searchtools.js"></script>
@@ -72,7 +73,9 @@
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -120,7 +123,7 @@
   
   
   
-    <p class="title logo__title">PyDDA 2.3.0 documentation</p>
+    <p class="title logo__title">PyDDA 2.5.0 documentation</p>
   
 </a></div>
     
@@ -182,11 +185,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -271,11 +281,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
@@ -350,10 +367,38 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">convolve1d</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">fmin_l_bfgs_b</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">savgol_filter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.auglag</span><span class="w"> </span><span class="kn">import</span> <span class="n">auglag</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_from_pyart_grid</span>
+
+<span class="n">_LEISE_KERNEL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="o">/</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">16</span><span class="p">])</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_apply_low_pass_filter</span><span class="p">(</span>
+    <span class="n">winds</span><span class="p">,</span> <span class="n">filter_type</span><span class="p">,</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">leise_nstep</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Smooth the (3, nz, ny, nx) wind array in place along all spatial axes.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">filter_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;savgol&quot;</span><span class="p">,</span> <span class="s2">&quot;leise&quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;filter_type must be &#39;savgol&#39; or &#39;leise&#39;, got </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">filter_type</span>
+        <span class="p">)</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">filter_type</span> <span class="o">==</span> <span class="s2">&quot;savgol&quot;</span><span class="p">:</span>
+                <span class="n">winds</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span>
+                    <span class="n">winds</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">winds</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">5</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">leise_nstep</span><span class="p">):</span>
+                    <span class="n">winds</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">convolve1d</span><span class="p">(</span>
+                        <span class="n">winds</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">_LEISE_KERNEL</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;mirror&quot;</span>
+                    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">winds</span>
+
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow_probability</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tfp</span>
@@ -523,7 +568,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">cvtol</span> <span class="o">=</span> <span class="mf">1e-2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gtol</span> <span class="o">=</span> <span class="mf">1e-2</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Jveltol</span> <span class="o">=</span> <span class="mf">100.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">const_boundary_cond</span> <span class="o">=</span> <span class="kc">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">const_boundary_cond</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parallel</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
 
@@ -561,8 +607,10 @@
     <span class="n">weights_bg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_iterations</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">mask_w_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">filter_type</span><span class="o">=</span><span class="s2">&quot;savgol&quot;</span><span class="p">,</span>
     <span class="n">filter_window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">leise_nstep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">min_bca</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
     <span class="n">max_bca</span><span class="o">=</span><span class="mf">150.0</span><span class="p">,</span>
     <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -573,6 +621,7 @@
     <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span>
     <span class="n">const_boundary_cond</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">max_wind_mag</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="k">global</span> <span class="n">_wcurrmax</span>
     <span class="k">global</span> <span class="n">_wprevmax</span>
@@ -842,6 +891,15 @@
     <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="c1"># Zero out bg_weights at height levels where the interpolated background</span>
+    <span class="c1"># is NaN (i.e. outside the sounding&#39;s vertical range). Also replace NaN</span>
+    <span class="c1"># in u_back/v_back with 0 so those levels don&#39;t corrupt cost function</span>
+    <span class="c1"># arithmetic even though they carry zero weight.</span>
+    <span class="n">nan_bg_levels</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">)</span> <span class="o">|</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">bg_weights</span><span class="p">[</span><span class="n">nan_bg_levels</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">u_back</span><span class="p">)</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">v_back</span><span class="p">)</span>
     <span class="n">sum_Vr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">vrs</span> <span class="o">*</span> <span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">rmsVr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sum_Vr</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">weights</span><span class="p">))</span>
 
@@ -901,6 +959,7 @@
     <span class="n">parameters</span><span class="o">.</span><span class="n">upper_bc</span> <span class="o">=</span> <span class="n">upper_bc</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">points</span> <span class="o">=</span> <span class="n">points</span>
     <span class="n">parameters</span><span class="o">.</span><span class="n">point_list</span> <span class="o">=</span> <span class="n">points</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">parallel</span> <span class="o">=</span> <span class="n">parallel</span>
     <span class="n">_wprevmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">)</span>
     <span class="n">_wcurrmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">)</span>
     <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
@@ -964,14 +1023,21 @@
                 <span class="p">{</span><span class="s2">&quot;winds&quot;</span><span class="p">:</span> <span class="n">max_wind_mag</span> <span class="o">*</span> <span class="n">jnp</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">winds</span><span class="o">.</span><span class="n">shape</span><span class="p">)},</span>
             <span class="p">)</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="n">jnp</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">winds</span><span class="p">)</span>
+            <span class="c1"># JIT-compile the cost function explicitly so the compilation</span>
+            <span class="c1"># delay is isolated and visible before the solver loop starts.</span>
+            <span class="n">loss_and_gradient</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="n">loss_and_gradient</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compiling JAX cost functions...&quot;</span><span class="p">)</span>
+            <span class="n">loss_and_gradient</span><span class="p">({</span><span class="s2">&quot;winds&quot;</span><span class="p">:</span> <span class="n">winds</span><span class="p">})</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Compilation complete.&quot;</span><span class="p">)</span>
             <span class="n">solver</span> <span class="o">=</span> <span class="n">jaxopt</span><span class="o">.</span><span class="n">LBFGSB</span><span class="p">(</span>
                 <span class="n">loss_and_gradient</span><span class="p">,</span>
                 <span class="kc">True</span><span class="p">,</span>
                 <span class="n">has_aux</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iterations</span><span class="p">,</span>
                 <span class="n">tol</span><span class="o">=</span><span class="n">tolerance</span><span class="p">,</span>
-                <span class="n">jit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">jit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">implicit_diff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">winds</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;winds&quot;</span><span class="p">:</span> <span class="n">winds</span><span class="p">}</span>
             <span class="n">winds</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">winds</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">)</span>
@@ -1016,7 +1082,7 @@
     <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
     <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">low_pass_filter</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying low pass filter to wind field...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying </span><span class="si">%s</span><span class="s2"> low pass filter to wind field...&quot;</span> <span class="o">%</span> <span class="n">filter_type</span><span class="p">)</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">,</span>
             <span class="p">(</span>
@@ -1026,15 +1092,9 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
             <span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">_apply_low_pass_filter</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span> <span class="n">filter_type</span><span class="p">,</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">leise_nstep</span>
+        <span class="p">)</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
@@ -1071,17 +1131,20 @@
 
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;m/s&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_bca</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_bca</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;m/s&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_bca</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_bca</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
+    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;m/s&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_bca</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_bca</span>
 
@@ -1132,8 +1195,10 @@
     <span class="n">weights_bg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">max_iterations</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
     <span class="n">mask_w_outside_opt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">filter_type</span><span class="o">=</span><span class="s2">&quot;savgol&quot;</span><span class="p">,</span>
     <span class="n">filter_window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
     <span class="n">filter_order</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">leise_nstep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">min_bca</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
     <span class="n">max_bca</span><span class="o">=</span><span class="mf">150.0</span><span class="p">,</span>
     <span class="n">upper_bc</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -1538,7 +1603,7 @@
     <span class="c1"># &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">low_pass_filter</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying low pass filter to wind field...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Applying </span><span class="si">%s</span><span class="s2"> low pass filter to wind field...&quot;</span> <span class="o">%</span> <span class="n">filter_type</span><span class="p">)</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">winds</span><span class="p">)</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span>
             <span class="n">winds</span><span class="p">,</span>
@@ -1549,15 +1614,9 @@
                 <span class="n">parameters</span><span class="o">.</span><span class="n">grid_shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
             <span class="p">),</span>
         <span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">savgol_filter</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">winds</span> <span class="o">=</span> <span class="n">_apply_low_pass_filter</span><span class="p">(</span>
+            <span class="n">winds</span><span class="p">,</span> <span class="n">filter_type</span><span class="p">,</span> <span class="n">filter_window</span><span class="p">,</span> <span class="n">filter_order</span><span class="p">,</span> <span class="n">leise_nstep</span>
+        <span class="p">)</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">winds</span><span class="p">[</span><span class="mi">2</span><span class="p">]])</span>
         <span class="n">winds</span> <span class="o">=</span> <span class="n">winds</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
@@ -1593,17 +1652,20 @@
 
     <span class="n">u_field</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;u_wind&quot;</span>
-    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
+    <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;m/s&quot;</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_bca</span>
     <span class="n">u_field</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_bca</span>
     <span class="n">v_field</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;v_wind&quot;</span>
-    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;zonal component of wind velocity&quot;</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;meridional component of wind velocity&quot;</span>
+    <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;m/s&quot;</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_bca</span>
     <span class="n">v_field</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_bca</span>
     <span class="n">w_field</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;w_wind&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical component of wind velocity&quot;</span>
+    <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;m/s&quot;</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;min_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">min_bca</span>
     <span class="n">w_field</span><span class="p">[</span><span class="s2">&quot;max_bca&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_bca</span>
 
@@ -1734,14 +1796,26 @@
 <span class="sd">        If set to true, vertical winds outside the multiple doppler lobes will</span>
 <span class="sd">        be masked, i.e. if less than 2 radars provide coverage for a given</span>
 <span class="sd">        point.</span>
+<span class="sd">    filter_type: str (one of &quot;savgol&quot;, &quot;leise&quot;)</span>
+<span class="sd">        Which low-pass filter to apply after the optimization. ``&quot;savgol&quot;``</span>
+<span class="sd">        (default) uses ``scipy.signal.savgol_filter`` along each axis with the</span>
+<span class="sd">        ``filter_window`` / ``filter_order`` parameters below. ``&quot;leise&quot;`` uses</span>
+<span class="sd">        the iterated 5-point Leise kernel ([-1/16, 1/4, 5/8, 1/4, -1/16]) with</span>
+<span class="sd">        mirror boundaries, controlled by ``leise_nstep``.</span>
 <span class="sd">    filter_window: int</span>
-<span class="sd">        Window size to use for the low pass filter. A larger window will</span>
-<span class="sd">        increase the number of points factored into the polynomial fit for</span>
-<span class="sd">        the filter, and hence will increase the smoothness.</span>
+<span class="sd">        Window size to use for the Savitzky-Golay low pass filter. A larger</span>
+<span class="sd">        window will increase the number of points factored into the polynomial</span>
+<span class="sd">        fit for the filter, and hence will increase the smoothness. Only used</span>
+<span class="sd">        when ``filter_type=&quot;savgol&quot;``.</span>
 <span class="sd">    filter_order: int</span>
-<span class="sd">        The order of the polynomial to use for the low pass filter. Higher</span>
-<span class="sd">        order polynomials allow for the retention of smaller scale features</span>
-<span class="sd">        but may also not remove enough noise.</span>
+<span class="sd">        The order of the polynomial to use for the Savitzky-Golay low pass</span>
+<span class="sd">        filter. Higher order polynomials allow for the retention of smaller</span>
+<span class="sd">        scale features but may also not remove enough noise. Only used when</span>
+<span class="sd">        ``filter_type=&quot;savgol&quot;``.</span>
+<span class="sd">    leise_nstep: int</span>
+<span class="sd">        Number of Leise filter passes to apply along each spatial axis. Each</span>
+<span class="sd">        pass narrows the passband further. Only used when</span>
+<span class="sd">        ``filter_type=&quot;leise&quot;``.</span>
 <span class="sd">    min_bca: float</span>
 <span class="sd">        Minimum beam crossing angle in degrees between two radars. 30.0 is the</span>
 <span class="sd">        typical value used in many publications.</span>
@@ -1774,6 +1848,11 @@
 <span class="sd">        Tolerance for :math:`L_{2}` norm of gradient before stopping.</span>
 <span class="sd">    max_wind_mag: float</span>
 <span class="sd">        Constrain the optimization to have :math:`|u|`, :math:`|v|`, and :math:`|w| &lt; x` m/s.</span>
+<span class="sd">    parallel: bool</span>
+<span class="sd">        If True, enables parallelized cost and gradient computations for the scipy engine.</span>
+<span class="sd">        This vectorizes the radar loop in the radial velocity cost/gradient functions and</span>
+<span class="sd">        computes independent constraint gradients concurrently using a thread pool.</span>
+<span class="sd">        Default is False.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    =======</span>
@@ -1906,8 +1985,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1941,7 +2020,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>

@@ -1,0 +1,6 @@
+﻿pydda.initialization.make\_initialization\_from\_iem\_obs
+=========================================================
+
+.. currentmodule:: pydda.initialization
+
+.. autofunction:: make_initialization_from_iem_obs
