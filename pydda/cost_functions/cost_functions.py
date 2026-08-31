@@ -46,6 +46,8 @@ def J_function(winds, parameters):
     J: float
         The value of the cost function
     """
+    # Only the scipy and jax engines support the VVAD constraint
+    Jvad = 0
     if parameters.engine == "tensorflow":
         if not TENSORFLOW_AVAILABLE:
             raise ImportError(
@@ -274,42 +276,51 @@ def J_function(winds, parameters):
             )
         else:
             Jpoint = 0
+
+        if parameters.Cvad > 0:
+            Jvad = _cost_functions_numpy.calculate_vad_cost(
+                winds[0],
+                winds[1],
+                parameters.vad_weights,
+                parameters.u_vad,
+                parameters.v_vad,
+                coeff=parameters.Cvad,
+            )
+        else:
+            Jvad = 0
     elif parameters.engine == "jax":
         return J_function_jax(winds, parameters)
 
     if parameters.Nfeval % 10 == 0:
-        print(
-            (
-                "Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |"
-                + " Max w  "
-            )
+        header = "Nfeval | Jvel    | Jmass   | Jsmooth |   Jbg   | Jvort   | Jmodel  | Jpoint  |"
+        row = (
+            "{:7d}".format(int(parameters.Nfeval))
+            + "|"
+            + "{:9.4f}".format(float(Jvel))
+            + "|"
+            + "{:9.4f}".format(float(Jmass))
+            + "|"
+            + "{:9.4f}".format(float(Jsmooth))
+            + "|"
+            + "{:9.4f}".format(float(Jbackground))
+            + "|"
+            + "{:9.4f}".format(float(Jvorticity))
+            + "|"
+            + "{:9.4f}".format(float(Jmod))
+            + "|"
+            + "{:9.4f}".format(float(Jpoint))
+            + "|"
         )
-        print(
-            (
-                "{:7d}".format(int(parameters.Nfeval))
-                + "|"
-                + "{:9.4f}".format(float(Jvel))
-                + "|"
-                + "{:9.4f}".format(float(Jmass))
-                + "|"
-                + "{:9.4f}".format(float(Jsmooth))
-                + "|"
-                + "{:9.4f}".format(float(Jbackground))
-                + "|"
-                + "{:9.4f}".format(float(Jvorticity))
-                + "|"
-                + "{:9.4f}".format(float(Jmod))
-                + "|"
-                + "{:9.4f}".format(float(Jpoint))
-                + "|"
-                + "{:9.4f}".format(np.ma.max(np.ma.abs(winds[2])))
-            )
-        )
+        if parameters.Cvad > 0:
+            header += " Jvad    |"
+            row += "{:9.4f}".format(float(Jvad)) + "|"
+        print(header + " Max w  ")
+        print(row + "{:9.4f}".format(np.ma.max(np.ma.abs(winds[2]))))
 
     parameters.Nfeval += 1
     # print("The cost functions print", Jvel + Jmass)
 
-    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod + Jpoint
+    return Jvel + Jmass + Jsmooth + Jbackground + Jvorticity + Jmod + Jpoint + Jvad
 
 
 def grad_J(winds, parameters):
@@ -630,6 +641,20 @@ def grad_J(winds, parameters):
                             parameters.roi,
                         )
                     )
+                if parameters.Cvad > 0:
+                    futures.append(
+                        pool.submit(
+                            _cost_functions_numpy.calculate_vad_gradient,
+                            winds[0],
+                            winds[1],
+                            parameters.vad_weights,
+                            parameters.u_vad,
+                            parameters.v_vad,
+                            parameters.Cvad,
+                            parameters.upper_bc,
+                            parameters.upper_bc_mask,
+                        )
+                    )
             grad = sum(f.result() for f in futures)
         else:
             grad = _cost_functions_numpy.calculate_grad_radial_vel(
@@ -724,6 +749,18 @@ def grad_J(winds, parameters):
                     parameters.point_list,
                     Cp=parameters.Cpoint,
                     roi=parameters.roi,
+                )
+
+            if parameters.Cvad > 0:
+                grad += _cost_functions_numpy.calculate_vad_gradient(
+                    winds[0],
+                    winds[1],
+                    parameters.vad_weights,
+                    parameters.u_vad,
+                    parameters.v_vad,
+                    coeff=parameters.Cvad,
+                    upper_bc=parameters.upper_bc,
+                    upper_bc_mask=parameters.upper_bc_mask,
                 )
 
         # Let's see if we need to enforce strong boundary conditions
@@ -880,7 +917,19 @@ def J_function_jax(winds, parameters):
     else:
         Jpoint = 0
 
-    return Jvel + Jsmooth + Jmass + Jmod + Jpoint + Jvorticity + Jbackground
+    if parameters.Cvad > 0:
+        Jvad = _cost_functions_jax.calculate_vad_cost(
+            winds[0],
+            winds[1],
+            parameters.vad_weights,
+            parameters.u_vad,
+            parameters.v_vad,
+            coeff=parameters.Cvad,
+        )
+    else:
+        Jvad = 0
+
+    return Jvel + Jsmooth + Jmass + Jmod + Jpoint + Jvorticity + Jbackground + Jvad
 
 
 def grad_jax(winds, parameters):
@@ -985,6 +1034,18 @@ def grad_jax(winds, parameters):
             parameters.point_list,
             Cp=parameters.Cpoint,
             roi=parameters.roi,
+        )
+
+    if parameters.Cvad > 0:
+        grad += _cost_functions_jax.calculate_vad_gradient(
+            winds[0],
+            winds[1],
+            parameters.vad_weights,
+            parameters.u_vad,
+            parameters.v_vad,
+            coeff=parameters.Cvad,
+            upper_bc=parameters.upper_bc,
+            upper_bc_mask=parameters.upper_bc_mask,
         )
     return grad
 

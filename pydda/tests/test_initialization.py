@@ -254,3 +254,154 @@ def test_hrrr_uv_rotated_to_true_north():
     speed_true_north = np.sqrt(u_true_north**2 + v_true_north**2)
     speed_grid_relative = np.sqrt(u_grid_relative**2 + v_grid_relative**2)
     np.testing.assert_allclose(speed_true_north, speed_grid_relative, rtol=1e-4)
+
+
+def _linear_wind_grid(
+    U0=7.0,
+    V0=-3.0,
+    Ux=1.2e-4,
+    Uy=3.0e-5,
+    Vy=-4.0e-4,
+    fall_speed=0.0,
+    shift_radar=False,
+):
+    """
+    Builds a Grid whose Doppler velocity is synthesized from an exactly linear
+    horizontal wind field, so the VVAD fit of Protat et al. (2024) must
+    recover the wind exactly. The flow is irrotational by construction
+    (Vx == Uy), matching the closure the reconstruction assumes.
+
+    Returns the Grid together with the true u and v fields and the true
+    control variables.
+    """
+    from pydda.constraints.vad_data import _geometry
+
+    Grid = pyart.testing.make_empty_grid(
+        (12, 40, 40), ((500.0, 8000.0), (-40000.0, 40000.0), (-40000.0, 40000.0))
+    )
+    Grid.add_field("velocity", {"data": np.zeros((12, 40, 40)), "_FillValue": -9999.0})
+    Grid = pydda.io.read_from_pyart_grid(Grid)
+
+    if shift_radar:
+        # Move the radar off the grid origin so the reconstruction origin is
+        # genuinely exercised.
+        Grid["radar_latitude"].values[0] += 0.12
+        Grid["radar_longitude"].values[0] += -0.10
+        Grid = pydda.retrieval.angles.add_elevation_as_field(Grid)
+
+    Vx = Uy  # irrotational
+    dx, dy, rh, az, el = _geometry(Grid)
+    u_true = U0 + Ux * dx + Uy * dy
+    v_true = V0 + Vx * dx + Vy * dy
+
+    el = np.asarray(el)
+    vr = (
+        np.cos(el) * np.sin(az) * u_true
+        + np.cos(el) * np.cos(az) * v_true
+        - np.sin(el) * fall_speed
+    )
+    Grid["velocity"] = Grid["velocity"].copy(data=np.expand_dims(vr, 0))
+
+    truth = {
+        "U0": U0,
+        "V0": V0,
+        "DIV": Ux + Vy,
+        "DET": Ux - Vy,
+        "DES": Uy + Vx,
+        "fall_speed": fall_speed,
+    }
+    return Grid, u_true, v_true, truth
+
+
+@pytest.mark.parametrize("shift_radar", [False, True])
+def test_vvad_recovers_linear_wind(shift_radar):
+    """A wind field that exactly satisfies the VAD linearity assumption must
+    be recovered to machine precision at every level."""
+    Grid, u_true, v_true, truth = _linear_wind_grid(shift_radar=shift_radar)
+    profiles = pydda.constraints.vvad_retrieval(Grid, vel_field="velocity")
+
+    assert profiles["valid"].values.all()
+    ok = profiles["valid"].values
+    for name, expected in truth.items():
+        np.testing.assert_allclose(
+            profiles[name].values[ok], expected, atol=1e-9, rtol=0
+        )
+
+
+def test_vvad_separates_fall_speed_from_divergence():
+    """A uniform fall speed must be recovered on its own rather than aliasing
+    into the divergence."""
+    Grid, _, _, truth = _linear_wind_grid(fall_speed=2.5)
+    profiles = pydda.constraints.vvad_retrieval(Grid, vel_field="velocity")
+
+    ok = profiles["valid"].values
+    np.testing.assert_allclose(profiles["fall_speed"].values[ok], 2.5, atol=1e-9)
+    np.testing.assert_allclose(
+        profiles["DIV"].values[ok], truth["DIV"], atol=1e-12, rtol=0
+    )
+
+
+def test_vvad_horizontal_wind_round_trip():
+    """Reconstructing from the fitted profiles must return the linear wind
+    field it was fitted to, and NaN beyond max_range."""
+    Grid, u_true, v_true, _ = _linear_wind_grid()
+    profiles = pydda.constraints.vvad_retrieval(Grid, vel_field="velocity")
+
+    u_vad, v_vad = pydda.constraints.vvad_horizontal_wind(profiles, Grid)
+    np.testing.assert_allclose(u_vad, u_true, atol=1e-7)
+    np.testing.assert_allclose(v_vad, v_true, atol=1e-7)
+
+    rh = np.sqrt(Grid["point_x"].values ** 2 + Grid["point_y"].values ** 2)
+    u_clip, _ = pydda.constraints.vvad_horizontal_wind(
+        profiles, Grid, max_range=20000.0
+    )
+    assert np.all(np.isnan(u_clip[rh > 20000.0]))
+    assert np.all(np.isfinite(u_clip[rh <= 20000.0]))
+
+
+def test_vvad_rejects_undersampled_levels():
+    """Each acceptance criterion must reject a level it is meant to, and an
+    invalid level must reconstruct as NaN rather than as a wild extrapolation.
+    """
+    Grid, _, _, _ = _linear_wind_grid()
+
+    for kwargs in (
+        {"min_points": 10**9},
+        {"min_azimuth_coverage": 1.01},
+        {"max_condition": 1e-6},
+    ):
+        profiles = pydda.constraints.vvad_retrieval(
+            Grid, vel_field="velocity", **kwargs
+        )
+        assert not profiles["valid"].values.any(), kwargs
+        assert np.all(np.isnan(profiles["U0"].values)), kwargs
+
+        u_vad, v_vad = pydda.constraints.vvad_horizontal_wind(profiles, Grid)
+        assert np.all(np.isnan(u_vad)) and np.all(np.isnan(v_vad)), kwargs
+
+
+def test_make_constraint_from_vvad_adds_fields():
+    """The constraint builder writes U_vvad/V_vvad into every Grid, and the
+    two combine modes cover the same points by different means."""
+    Grid, u_true, v_true, _ = _linear_wind_grid()
+    Grids = pydda.constraints.make_constraint_from_vvad(
+        [Grid, Grid.copy(deep=True)], vel_field="velocity"
+    )
+
+    for g in Grids:
+        assert "U_vvad" in g.variables and "V_vvad" in g.variables
+        assert g["U_vvad"].dims == ("time", "z", "y", "x")
+        # No W_vvad: the VVAD supplies horizontal components only.
+        assert "W_vvad" not in g.variables
+
+    np.testing.assert_allclose(Grids[0]["U_vvad"].values.squeeze(), u_true, atol=1e-7)
+
+    nearest = pydda.constraints.make_constraint_from_vvad(
+        [Grid.copy(deep=True)], vel_field="velocity", combine="nearest"
+    )
+    np.testing.assert_allclose(nearest[0]["U_vvad"].values.squeeze(), u_true, atol=1e-7)
+
+    with pytest.raises(ValueError):
+        pydda.constraints.make_constraint_from_vvad(
+            [Grid], vel_field="velocity", combine="not_a_mode"
+        )

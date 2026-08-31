@@ -515,3 +515,139 @@ def test_nested_retrieval():
         quiverkey_loc="bottom_right",
     )
     return fig
+
+
+# Common arguments for the VVAD constraint tests. The filtering and masking are
+# turned off so the retrieved winds can be compared point by point.
+VVAD_KWARGS = dict(
+    Co=1.0,
+    Cm=256.0,
+    Cx=1e-2,
+    Cy=1e-2,
+    Cz=1e-2,
+    max_iterations=30,
+    vel_name="corrected_velocity",
+    refl_field="reflectivity",
+    low_pass_filter=False,
+    mask_outside_opt=False,
+    mask_w_outside_opt=False,
+)
+
+
+def _twpice_vvad_grids():
+    """The TWP-ICE grid pair with the VVAD constraint fields attached."""
+    Grid0, Grid1 = _twpice_grids()
+    return pydda.constraints.make_constraint_from_vvad(
+        [Grid0, Grid1], vel_field="corrected_velocity"
+    )
+
+
+def test_vvad_constraint_on_real_grids():
+    """The VVAD reconstruction on real radar data must be physically
+    plausible. This is the regression guard on the acceptance criteria: a
+    level fit from a narrow sector of azimuth yields deformation terms orders
+    of magnitude too large, which the reconstruction turns into winds of
+    hundreds of m/s."""
+    Grids = _twpice_vvad_grids()
+    u_vad = Grids[0]["U_vvad"].values.squeeze()
+    v_vad = Grids[0]["V_vvad"].values.squeeze()
+
+    # The constraint must actually cover a useful part of the domain.
+    assert 0.25 < np.isfinite(u_vad).mean() < 1.0
+    assert np.nanmax(np.abs(u_vad)) < 60.0
+    assert np.nanmax(np.abs(v_vad)) < 60.0
+
+    for Grid in Grids:
+        profiles = pydda.constraints.vvad_retrieval(
+            Grid, vel_field="corrected_velocity"
+        )
+        ok = profiles["valid"].values
+        assert ok.sum() > 10
+        # A mean divergence over a 150 km domain is O(1e-4) per second; 1e-3
+        # would extrapolate to winds of over 100 m/s at the domain edge.
+        assert np.all(np.abs(profiles["DIV"].values[ok]) < 1e-3)
+        assert np.all(np.abs(profiles["U0"].values[ok]) < 60.0)
+
+
+def test_vvad_weights_match_ivad_switch():
+    """parameters.vad_weights must implement i_vad of Eq. (19) of Protat et
+    al. (2024) exactly: on where at most one radar contributes and the VVAD
+    has a value, off everywhere else."""
+    Grids = _twpice_vvad_grids()
+    u_vad = Grids[0]["U_vvad"].values.squeeze()
+    v_vad = Grids[0]["V_vvad"].values.squeeze()
+
+    _, parameters = pydda.retrieval.get_dd_wind_field(
+        deepcopy(Grids), Cvad=1.0, engine="scipy", **VVAD_KWARGS
+    )
+
+    n_rad = np.sum(parameters.weights, axis=0)
+    expected = np.logical_and(
+        n_rad <= 1, np.logical_and(np.isfinite(u_vad), np.isfinite(v_vad))
+    )
+    np.testing.assert_array_equal(parameters.vad_weights > 0, expected)
+
+    # The TWP-ICE pair genuinely has both regimes, so this is a real test.
+    assert (n_rad > 1).any() and (n_rad <= 1).any()
+    assert not np.any(parameters.vad_weights[n_rad > 1] > 0)
+
+
+def test_vvad_constraint_pulls_analysis_toward_vad():
+    """Turning the VVAD constraint on must move the analysis toward the VVAD
+    winds where the constraint is active."""
+    Grids = _twpice_vvad_grids()
+    u_vad = np.nan_to_num(Grids[0]["U_vvad"].values.squeeze())
+    v_vad = np.nan_to_num(Grids[0]["V_vvad"].values.squeeze())
+
+    off, _ = pydda.retrieval.get_dd_wind_field(
+        deepcopy(Grids), Cvad=0.0, engine="scipy", **VVAD_KWARGS
+    )
+    on, parameters = pydda.retrieval.get_dd_wind_field(
+        deepcopy(Grids), Cvad=1.0, engine="scipy", **VVAD_KWARGS
+    )
+
+    active = parameters.vad_weights > 0
+    assert active.any()
+
+    def departure(Grids_out):
+        u = Grids_out[0]["u"].values.squeeze()
+        v = Grids_out[0]["v"].values.squeeze()
+        return np.mean(
+            np.sqrt((u[active] - u_vad[active]) ** 2 + (v[active] - v_vad[active]) ** 2)
+        )
+
+    assert departure(on) < departure(off)
+
+
+def test_vvad_requires_constraint_fields():
+    """Cvad without the VVAD fields is a clear error rather than a crash."""
+    Grid0, Grid1 = _twpice_grids()
+    with pytest.raises(ValueError, match="U_vvad"):
+        pydda.retrieval.get_dd_wind_field(
+            [Grid0, Grid1], Cvad=1.0, engine="scipy", **VVAD_KWARGS
+        )
+
+
+@pytest.mark.parametrize("engine", ["tensorflow", "auglag"])
+def test_vvad_unsupported_engines(engine):
+    """The VVAD constraint is implemented for the scipy and jax engines only."""
+    Grids = _twpice_vvad_grids()
+    with pytest.raises(NotImplementedError, match="VVAD"):
+        pydda.retrieval.get_dd_wind_field(Grids, Cvad=1.0, engine=engine, **VVAD_KWARGS)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_vvad_constraint_jax():
+    """The jax engine must reach the same solution as scipy with the VVAD
+    constraint active."""
+    Grids = _twpice_vvad_grids()
+    scipy_out, _ = pydda.retrieval.get_dd_wind_field(
+        deepcopy(Grids), Cvad=1.0, engine="scipy", **VVAD_KWARGS
+    )
+    jax_out, _ = pydda.retrieval.get_dd_wind_field(
+        deepcopy(Grids), Cvad=1.0, engine="jax", **VVAD_KWARGS
+    )
+
+    u_scipy = np.asarray(scipy_out[0]["u"].values.squeeze())
+    u_jax = np.asarray(jax_out[0]["u"].values.squeeze())
+    assert np.nanmean(np.abs(u_scipy - u_jax)) < 0.5

@@ -75,6 +75,8 @@ procedures in Python, they then need to be added to
     calculate_point_cost
     calculate_point_gradient
     calculate_echo_top_mask
+    calculate_vad_cost
+    calculate_vad_gradient
 """
 
 import cmweather

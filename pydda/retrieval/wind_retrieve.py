@@ -212,6 +212,10 @@ class DDParameters(object):
         self.Cv = 0.0
         self.Cmod = 0.0
         self.Cpoint = 0.0
+        self.Cvad = 0.0
+        self.u_vad = None
+        self.v_vad = None
+        self.vad_weights = None
         self.Ut = 0.0
         self.Vt = 0.0
         self.upper_bc = 1
@@ -253,6 +257,7 @@ def _get_dd_wind_field_scipy(
     Cv=0.0,
     Cmod=0.0,
     Cpoint=0.0,
+    Cvad=0.0,
     cvtol=1e-2,
     gtol=1e-2,
     Jveltol=100.0,
@@ -323,6 +328,12 @@ def _get_dd_wind_field_scipy(
             raise ValueError(("Grids have unequal origin lat/lons!"))
 
         prev_grid = g
+
+    if Cvad > 0 and engine.lower() not in ("scipy", "jax"):
+        raise NotImplementedError(
+            'The VVAD constraint is only implemented for the "scipy" and '
+            '"jax" engines, not "%s".' % engine
+        )
 
     if engine.lower() == "auglag" and not TENSORFLOW_AVAILABLE:
         raise ModuleNotFoundError(
@@ -621,6 +632,31 @@ def _get_dd_wind_field_scipy(
         parameters.upper_bc_mask = calculate_echo_top_mask(
             parameters.vrs, parameters.z, above=above
         )
+
+    parameters.Cvad = Cvad
+    if Cvad > 0:
+        if "U_vvad" not in Grids[0].variables or "V_vvad" not in Grids[0].variables:
+            raise ValueError(
+                "Cvad is nonzero but the Grid has no U_vvad/V_vvad fields. Add "
+                "them with pydda.constraints.make_constraint_from_vvad."
+            )
+        u_vad = Grids[0]["U_vvad"].values.squeeze()
+        v_vad = Grids[0]["V_vvad"].values.squeeze()
+
+        # i_vad of Eq. (19) of Protat et al. (2024): the VVAD constrains the
+        # horizontal wind only where multi-Doppler information is unavailable,
+        # i.e. at points seen by at most one radar. parameters.weights has
+        # already been binarized above, so summing over the radar axis counts
+        # the radars contributing at each point.
+        n_rad = np.sum(parameters.weights, axis=0)
+        has_vad = np.logical_and(np.isfinite(u_vad), np.isfinite(v_vad))
+        parameters.vad_weights = np.logical_and(n_rad <= 1, has_vad).astype(float)
+        parameters.u_vad = np.nan_to_num(u_vad)
+        parameters.v_vad = np.nan_to_num(v_vad)
+        print(
+            "VVAD constraint active at %d points." % int(parameters.vad_weights.sum())
+        )
+
     parameters.points = points
     parameters.point_list = points
     parameters.parallel = parallel
@@ -1446,6 +1482,16 @@ def get_dd_wind_field(
         Weight for cost function related to custom constraints.
     Cpoint: float
         Weight for cost function related to point observations.
+    Cvad: float
+        Weight for the VVAD constraint of Protat et al. (2024), the sixth term
+        of their Eq. (19). Set to a value greater than zero to nudge the
+        horizontal wind toward the velocity azimuth display reconstruction
+        wherever multi-Doppler information is unavailable, which supplies
+        winds in data voids such as the grid points below the lowest radar
+        gate. Requires the *U_vvad* and *V_vvad* fields, which are added by
+        :py:func:`pydda.constraints.make_constraint_from_vvad`, and is only
+        available for the "scipy" and "jax" engines. Protat et al. (2024) use
+        a weight of 1, equal to that of the radial velocity constraint.
     weights_obs: list of floating point arrays or None
         List of weights for each point in grid from each radar in Grids.
         Set to None to let PyDDA determine this automatically.
@@ -1588,6 +1634,11 @@ def get_dd_wind_field(
             new_grids, u_init, v_init, w_init, engine, **kwargs
         )
     elif engine.lower() == "tensorflow":
+        if kwargs.get("Cvad", 0.0) > 0:
+            raise NotImplementedError(
+                'The VVAD constraint is only implemented for the "scipy" and '
+                '"jax" engines, not "tensorflow".'
+            )
         return _get_dd_wind_field_tensorflow(
             new_grids, u_init, v_init, w_init, **kwargs
         )

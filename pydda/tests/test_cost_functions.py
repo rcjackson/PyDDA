@@ -1094,3 +1094,121 @@ def test_mass_continuity_gradient_upper_bc_tf():
     assert np.all(grid_top[-1] == 0)
     assert np.all(echo_top[mask] == 0)
     np.testing.assert_allclose(echo_top[~mask], none_bc[~mask])
+
+
+from scipy.optimize import approx_fprime
+
+
+def _make_vad_inputs(seed=0, shape=(5, 6, 7)):
+    """Random winds, VVAD winds, and a partially active i_vad mask."""
+    rng = np.random.default_rng(seed)
+    u = rng.normal(size=shape)
+    v = rng.normal(size=shape)
+    w = rng.normal(size=shape)
+    u_vad = rng.normal(size=shape)
+    v_vad = rng.normal(size=shape)
+    vad_weights = (rng.random(shape) > 0.4).astype(float)
+    return u, v, w, u_vad, v_vad, vad_weights
+
+
+def test_vad_cost():
+    """The VVAD cost is the i_vad-weighted sum of squared horizontal
+    departures, and is zero when the analysis equals the VVAD."""
+    u, v, w, u_vad, v_vad, vad_weights = _make_vad_inputs()
+
+    expected = 2.5 * np.sum((np.square(u - u_vad) + np.square(v - v_vad)) * vad_weights)
+    actual = pydda.cost_functions.np.calculate_vad_cost(
+        u, v, vad_weights, u_vad, v_vad, coeff=2.5
+    )
+    np.testing.assert_allclose(actual, expected)
+
+    # No cost where the analysis already matches the VVAD.
+    assert (
+        pydda.cost_functions.np.calculate_vad_cost(
+            u_vad, v_vad, vad_weights, u_vad, v_vad, coeff=2.5
+        )
+        == 0.0
+    )
+
+    # No cost at all where i_vad is zero everywhere.
+    assert (
+        pydda.cost_functions.np.calculate_vad_cost(
+            u, v, np.zeros_like(vad_weights), u_vad, v_vad, coeff=2.5
+        )
+        == 0.0
+    )
+
+
+def test_vad_gradient():
+    """The analytic VVAD gradient matches finite differences, leaves w
+    untouched, and vanishes wherever i_vad is zero."""
+    u, v, w, u_vad, v_vad, vad_weights = _make_vad_inputs()
+    shape = u.shape
+    n = int(np.prod(shape))
+    coeff = 1.7
+
+    def J(x):
+        x = x.reshape((3,) + shape)
+        return pydda.cost_functions.np.calculate_vad_cost(
+            x[0], x[1], vad_weights, u_vad, v_vad, coeff=coeff
+        )
+
+    x0 = np.concatenate([u.ravel(), v.ravel(), w.ravel()])
+    finite_diff = approx_fprime(x0, J, 1e-6)
+    analytic = pydda.cost_functions.np.calculate_vad_gradient(
+        u, v, vad_weights, u_vad, v_vad, coeff=coeff, upper_bc=0
+    )
+    np.testing.assert_allclose(analytic, finite_diff, atol=1e-4)
+
+    # The VVAD constrains the horizontal wind only.
+    assert np.all(analytic[2 * n :] == 0)
+
+    # Eq. (19) of Protat et al. (2024) switches the term off entirely where
+    # multi-Doppler information is available, so it must contribute no
+    # gradient at those points.
+    grad = analytic.reshape((3,) + shape)
+    assert np.all(grad[0][vad_weights == 0] == 0)
+    assert np.all(grad[1][vad_weights == 0] == 0)
+
+
+@pytest.mark.skipif(not JAX_AVAILABLE, reason="Jax not installed")
+def test_vad_cost_jax():
+    """The jax VVAD cost and gradient agree with the numpy ones."""
+    u, v, w, u_vad, v_vad, vad_weights = _make_vad_inputs()
+
+    np_cost = pydda.cost_functions.np.calculate_vad_cost(
+        u, v, vad_weights, u_vad, v_vad, coeff=2.5
+    )
+    jax_cost = pydda.cost_functions.jax.calculate_vad_cost(
+        u, v, vad_weights, u_vad, v_vad, coeff=2.5
+    )
+    np.testing.assert_allclose(float(jax_cost), np_cost, rtol=1e-5)
+
+    np_grad = pydda.cost_functions.np.calculate_vad_gradient(
+        u, v, vad_weights, u_vad, v_vad, coeff=2.5
+    )
+    jax_grad = pydda.cost_functions.jax.calculate_vad_gradient(
+        u, v, vad_weights, u_vad, v_vad, coeff=2.5
+    )
+    np.testing.assert_allclose(np.asarray(jax_grad), np_grad, atol=1e-5)
+
+
+def test_vad_gradient_upper_bc():
+    """The VVAD gradient honors the upper boundary condition modes even
+    though its own w gradient is identically zero."""
+    u, v, w, u_vad, v_vad, vad_weights = _make_vad_inputs()
+    mask = np.zeros(u.shape, dtype=bool)
+    mask[-2:] = True
+
+    for upper_bc in (0, 1, 2):
+        grad = pydda.cost_functions.np.calculate_vad_gradient(
+            u,
+            v,
+            vad_weights,
+            u_vad,
+            v_vad,
+            coeff=1.0,
+            upper_bc=upper_bc,
+            upper_bc_mask=mask,
+        )
+        assert np.all(_w_component(grad, u.shape) == 0)

@@ -952,3 +952,90 @@ def calculate_model_gradient(u, v, w, weights, u_model, v_model, w_model, coeff=
 
     y = np.stack([u_grad, v_grad, w_grad], axis=0)
     return y.flatten()
+
+
+def calculate_vad_cost(u, v, vad_weights, u_vad, v_vad, coeff=1.0):
+    """
+    Calculates the cost function for the VVAD constraint of Protat et al.
+    (2024), the sixth term of their Eq. (19),
+
+    .. math::
+
+        i_{vad} W_{vad} \\sum (U - U_{vad})^2 + (V - V_{vad})^2
+
+    Vertical velocities do not enter this cost function; the VVAD supplies
+    horizontal wind components only.
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    vad_weights: 3D array
+        Float array showing how much each point from the VVAD weighs into the
+        constraint. This carries the :math:`i_{vad}` switch of Eq. (19), i.e.
+        it is zero wherever more than one radar observes the point.
+    u_vad: 3D array
+        Float array with u component of wind field from the VVAD
+    v_vad: 3D array
+        Float array with v component of wind field from the VVAD
+    coeff: float
+        Weighting coefficient
+
+    Returns
+    -------
+    Jvad: float
+        Value of the VVAD cost function
+
+    References
+    ----------
+    Protat, A., V. Louf, and J. P. Brook, 2024: SWIRL: The First Australian
+    Operational Radar-Based 3D Wind Analysis System. *J. Atmos. Oceanic
+    Technol.*, **41**, 891-910, https://doi.org/10.1175/JTECH-D-23-0155.1.
+    """
+    return coeff * np.sum((np.square(u - u_vad) + np.square(v - v_vad)) * vad_weights)
+
+
+def calculate_vad_gradient(
+    u, v, vad_weights, u_vad, v_vad, coeff=1.0, upper_bc=1, upper_bc_mask=None
+):
+    """
+    Calculates the gradient of the VVAD cost function, which is simply twice
+    the weighted difference between the analysis and the VVAD wind for each of
+    u and v. The gradient with respect to w is zero everywhere, since the VVAD
+    constrains the horizontal components only.
+
+    Parameters
+    ----------
+    u: 3D array
+        Float array with u component of wind field
+    v: 3D array
+        Float array with v component of wind field
+    vad_weights: 3D array
+        Float array showing how much each point from the VVAD weighs into the
+        constraint.
+    u_vad: 3D array
+        Float array with u component of wind field from the VVAD
+    v_vad: 3D array
+        Float array with v component of wind field from the VVAD
+    coeff: float
+        Weighting coefficient
+    upper_bc: int
+        Set to 1 to impose w = 0 at the top of the domain, 2 to impose it
+        above the echo top, and 0 for no upper boundary condition.
+    upper_bc_mask: 3D bool array or None
+        The echo top mask used when *upper_bc* is 2.
+
+    Returns
+    -------
+    y: 1D float array
+        Value of the gradient of the VVAD cost function
+    """
+    u_grad = coeff * 2 * (u - u_vad) * vad_weights
+    v_grad = coeff * 2 * (v - v_vad) * vad_weights
+    w_grad = np.zeros(u.shape)
+    w_grad = _apply_upper_bc(w_grad, upper_bc, upper_bc_mask)
+
+    y = np.stack([u_grad, v_grad, w_grad], axis=0)
+    return y.flatten()

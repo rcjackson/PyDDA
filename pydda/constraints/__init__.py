@@ -23,6 +23,9 @@ simply add (name) into the model_fields option of
      make_constraint_from_era5
      download_needed_era_data
      get_iem_obs
+     make_constraint_from_vvad
+     vvad_retrieval
+     vvad_horizontal_wind
 
 """
 
@@ -31,3 +34,6 @@ from .model_data import add_hrrr_constraint_to_grid
 from .model_data import make_constraint_from_era5
 from .model_data import download_needed_era_data
 from .station_data import get_iem_obs
+from .vad_data import make_constraint_from_vvad
+from .vad_data import vvad_retrieval
+from .vad_data import vvad_horizontal_wind
