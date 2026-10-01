@@ -430,3 +430,77 @@ more importance on horizontal winds compared to updraft velocities, then you may
 to tolerate more errors in the vertical velocity field so that finer details of the horizontal
 wind field can be generated. The above parameters are examples that apply to a 1 km
 resolution grid from two NEXRADs and vary for given radar configurations and storm coverages.
+
+------------------------------------
+Choosing an upper boundary condition
+------------------------------------
+
+PyDDA constrains the vertical velocity at the boundaries of the analysis domain by
+zeroing the gradient of the cost function with respect to :math:`w` there, so that
+:math:`w` is held at its first guess. At the surface this impermeability condition is
+always applied. At the top of the domain it is controlled by the :code:`upper_bc`
+keyword of :meth:`pydda.retrieval.get_dd_wind_field`, which takes one of three values:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 20 80
+
+    * - :code:`upper_bc`
+      - Condition applied
+    * - :code:`0`
+      - No condition at the top of the domain.
+    * - :code:`1`
+      - :math:`w = 0` at the top vertical level of the grid.
+    * - :code:`2`
+      - :math:`w = 0` above the echo top, i.e. wherever no radar reports an
+        observation and the point is higher than *above* km in the grid's
+        vertical coordinate.
+
+The classic choice is :code:`upper_bc=1`, which imposes :math:`w = 0` at the top of the
+analysis domain. That is only physically defensible when the domain top is genuinely
+above the storm. If the grid is truncated through the middle of deep convection, the
+condition forces the mass continuity constraint to close the divergence profile at an
+arbitrary height and pushes a spurious compensating signal down into the levels you
+actually care about.
+
+Setting :code:`upper_bc=2` instead applies the impermeability condition at the *echo
+top*: every grid point at which none of the radars report a valid radial velocity is
+treated as being outside the storm, and :math:`w` is held at its first guess there.
+Because the first guess for :math:`w` is normally zero, this is equivalent to requiring
+that no mass crosses the top of the observed echo. The method is described in Thompson
+et al. (2026), https://doi.org/10.5194/egusphere-2026-4631.
+
+The :code:`above` keyword sets the lowest altitude, in km, at which the echo top
+condition may be applied. It exists so that clear air at low levels -- gaps between
+cells, the cone of silence, the far edge of the Dual Doppler lobes -- does not pin
+:math:`w` to zero close to the surface, which would suppress the very updrafts you are
+trying to retrieve. The default of 2 km is a reasonable starting point; raise it if
+your radars have poor low-level coverage.
+
+.. code-block:: python
+
+    grids_out, _ = pydda.retrieval.get_dd_wind_field([grid_kict, grid_ktlx],
+                                                Cm=256.0, Co=1e-2, Cx=1, Cy=1,
+                                                Cz=1, Cmod=1e-5, model_fields=["hrrr"],
+                                                refl_field='DBZ', wind_tol=0.5,
+                                                max_iterations=50, filter_window=15,
+                                                filter_order=3, engine='scipy',
+                                                upper_bc=2, above=2.0)
+
+Both :code:`upper_bc` and :code:`above` are supported by all of PyDDA's engines
+(:code:`"scipy"`, :code:`"jax"`, :code:`"tensorflow"` and :code:`"auglag"`). The set of
+points at which the condition is applied is calculated once at the start of the
+retrieval by :meth:`pydda.cost_functions.calculate_echo_top_mask` and is returned on the
+:code:`upper_bc_mask` attribute of the parameters object, so it can be inspected
+afterwards:
+
+.. code-block:: python
+
+    grids_out, parameters = pydda.retrieval.get_dd_wind_field(
+        [grid_kict, grid_ktlx], upper_bc=2, above=2.0, ...)
+    print("Fraction of the domain held impermeable: %.2f"
+          % parameters.upper_bc_mask.mean())
+
+.. note::
+    For backwards compatibility :code:`upper_bc=True` and :code:`upper_bc=False` are
+    still accepted and mean the same as :code:`1` and :code:`0`.

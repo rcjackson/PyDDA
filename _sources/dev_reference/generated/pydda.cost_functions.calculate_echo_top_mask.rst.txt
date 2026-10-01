@@ -1,0 +1,6 @@
+﻿pydda.cost\_functions.calculate\_echo\_top\_mask
+================================================
+
+.. currentmodule:: pydda.cost_functions
+
+.. autofunction:: calculate_echo_top_mask

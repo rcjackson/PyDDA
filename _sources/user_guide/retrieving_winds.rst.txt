@@ -22,10 +22,58 @@ PyDDA minimizes a cost function :math:`J` that corresponds to various penalties 
 +----------------------------------------------------------------+----------------------------+
 | :math:`J_{s} = \nabla^2 V`                                     |  Wind field smoothness     |
 +----------------------------------------------------------------+----------------------------+
+| :math:`J_{vad} = \sum_{i_{vad}} [V_{VVAD} - \textbf{V}]^2`      |  VVAD winds                |
++----------------------------------------------------------------+----------------------------+
 
 The cost function to be minimized is a weighted sum of the various cost functions in PyDDA and are represented in Equation (1):
 
 :math:`J = c_{m}J_{m} + c_{o}J_{o} + c_{b}J_{b} + c_{s}J_{s} + ...` (1)
+
+---------------------------------------------
+Filling data voids with the VVAD constraint
+---------------------------------------------
+
+The dual-Doppler problem is only well posed where two radars observe the same
+point from sufficiently different directions. Outside the dual-Doppler lobes,
+and at the low levels that lie below the lowest radar gate, the horizontal wind
+is underdetermined by the radial velocities alone.
+
+:math:`J_{vad}` addresses this following the SWIRL system of
+`Protat et al. (2024) <https://doi.org/10.1175/JTECH-D-23-0155.1>`_. A
+variational velocity azimuth display (VVAD) fits vertical profiles of a linear
+wind model - :math:`U_0`, :math:`V_0`, the divergence, and the stretching and
+shearing deformations - to each radar's Doppler velocities. Those profiles
+reconstruct a horizontal wind at *every* point within range of the radar,
+including points with no observation at all, which is what lets the term fill
+data voids.
+
+Following Eq. (19) of Protat et al. (2024), the term carries a switch
+:math:`i_{vad}` that is zero wherever more than one radar contributes, so the
+VVAD never competes with genuine multi-Doppler information. PyDDA computes the
+switch automatically from the same radar coverage arrays it uses to weight the
+radial velocity term.
+
+.. code-block:: python
+
+    Grids = pydda.constraints.make_constraint_from_vvad(Grids)
+    Grids, parameters = pydda.retrieval.get_dd_wind_field(Grids, Cvad=1.0)
+
+Protat et al. (2024) use a weight of 1, equal to that of the radial velocity
+constraint. The constraint is available for the ``"scipy"`` and ``"jax"``
+engines.
+
+Two caveats are worth keeping in mind. First, every VAD technique assumes the
+horizontal wind is linear across the domain, which is reasonable in stratiform
+precipitation but not in convection. Second, PyDDA applies two acceptance
+criteria beyond the point count used in the paper - a minimum azimuthal
+coverage and a maximum condition number - because on a PyDDA analysis grid a
+height level can hold hundreds of valid velocities confined to a narrow sector
+of azimuth, which cannot determine the fit. See
+:py:func:`pydda.constraints.vvad_retrieval` for details.
+
+PyDDA does not implement the double VAD (DVAD) that Protat et al. (2024) use
+where two suitably spaced radars overlap, nor the optical flow term of their
+Eq. (19).
 
 -------------------------------
 Doing your first wind retrieval
